@@ -1,0 +1,44 @@
+/* Customization */
+
+.ant-menu {
+  border-inline-end: none !important;
+  background-color: rgba(255, 255, 255, 0);
+  padding: 0 20px;
+
+  .ant-menu-item {
+    width: 18rem;
+    height: 3.5625rem;
+    display: flex;
+    align-items: center;
+    padding: 0 1.44rem;
+    margin-bottom: 1.38rem;
+
+    svg {
+      margin-right: 1.81rem;
+      fill: #64B5F6;
+    }
+
+    .ant-menu-title-content {
+      font-family: YouSheBiaoTiHei, serif;
+      font-size: 1.75rem;
+      color: #64B5F6;
+    }
+
+    &.ant-menu-item-selected {
+      background-color: #0F71F2;
+
+      svg {
+        fill: #fff;
+      }
+
+      .ant-menu-title-content {
+        color: #fff;
+        //font-family: YouSheBiaoTiHei;
+      }
+    }
+  }
+}
+
+.ant-scroll-number.ant-badge-dot {
+  box-shadow: none;
+}

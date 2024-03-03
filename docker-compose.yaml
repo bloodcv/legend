@@ -1,0 +1,19 @@
+version: "1.0.0"
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_ZABBIX_SCHEMA: http
+        VITE_ZABBIX_DOMAIN: 127.0.0.1
+        VITE_ZABBIX_ACCOUNT: Admin
+        VITE_ZABBIX_PASSWORD: zabbix
+        VITE_SALT: secret-key
+        VITE_ISS_DOMAIN: iss-domain.com
+        VITE_CONFIG_PASSWORD: example
+    image: leg-july:1.0.0
+    container_name: leg-july
+    restart: always
+    ports:
+      - "3000:3000"

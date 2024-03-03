@@ -1,0 +1,29 @@
+{
+  "name": "legendary-july",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ant-design-vue": "^4.0.0",
+    "axios": "^1.4.0",
+    "danfojs": "1.1.1",
+    "dayjs": "^1.11.9",
+    "echarts": "^5.4.2",
+    "jsrsasign": "^10.8.6",
+    "pinia": "^2.1.4",
+    "vue": "^3.2.45",
+    "vue-i18n": "^9.2.2",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "sass": "^1.63.6",
+    "vite": "^4.1.0",
+    "vite-svg-loader": "^4.0.0"
+  }
+}
