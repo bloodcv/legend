@@ -79,7 +79,7 @@ export const useDataStore = defineStore("data", () => {
     const currentAvailableHostIds = ref([])
 
     async function updateHostGroupData() {
-        const res = await metaStore.getHostByGroupName(currentHostgroupName.value.hostgroup)
+        const res = await metaStore.getHostByGroupName(currentHostgroupName.value.hostgroup) || []
         hostIds.value = [] // host ids of current hostgroup 
         hostObjs.value = []
         res.forEach(element => {
@@ -367,13 +367,13 @@ export const useDataStore = defineStore("data", () => {
 
     // SubArea, Part1
     async function updateOnlineData() {
-        const problemsRes = await metaStore.getProblems(hostIds.value)
+        const problemsRes = await metaStore.getProblems(hostIds.value) || []
         let healthCount = 0
         let warningCount = 0
         let dangerCount = 0
         let availableHostsId = []
         warningCount = problemsRes.length
-        const hostsAvailableRes = await metaStore.getHostInterface(hostIds.value)
+        const hostsAvailableRes = await metaStore.getHostInterface(hostIds.value) || []
         hostsAvailableRes.forEach(element => {
 
             if (element.available == 1) {

@@ -18,7 +18,7 @@ export const useMetaStore = defineStore("meta", () => {
      */
     const hostGroupMetaInfo = ref({})
     async function updateHostGroupMetaInfo() {
-        const res = await zabbixRestService.value.getHostGroup(null)
+        const res = await zabbixRestService.value.getHostGroup(null) || []
         res.forEach(ele => {
             hostGroupMetaInfo.value[ele.name] = ele.groupid
         })
@@ -34,17 +34,18 @@ export const useMetaStore = defineStore("meta", () => {
         if (hostGroupMetaInfo.value[groupName] >= 0) {
             groupId = hostGroupMetaInfo.value[groupName]
         } else {
-            const res = await zabbixRestService.value.getHostGroup(groupName)
+            const res = await zabbixRestService.value.getHostGroup(groupName) || []
             if (res.length > 0) {
                 groupId = res[0].groupid
-            } else {
+            } 
+            /* else {
                 openNotification(
                     "get host group error",
                     `Host Group name: ${groupName} Not Found in Zabbix.`,
                     "error"
                 )
                 throw "get host group error"
-            }
+            } */
         }
 
         return await zabbixRestService.value.getHostByGroupId(groupId)
