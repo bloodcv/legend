@@ -334,7 +334,7 @@ export const useDataStore = defineStore("data", () => {
             },
             alert: {
                 title: t("topMetrics.alert.title"),
-                data: alertsWithin7days.value.length,
+                data: (alertsWithin7days.value || []).length,
                 unit: t("topMetrics.alert.unit"),
                 logo_name: "metric-alert-number"
             },

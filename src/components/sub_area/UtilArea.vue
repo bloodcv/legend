@@ -70,7 +70,7 @@ const configCollapseActiveKey = ref(['leftbar'])
 
 const metaStore = useMetaStore()
 onMounted(async () => {
-    const res = await metaStore.getAllHostGroups()
+    const res = await metaStore.getAllHostGroups() || []
     hostgroupOptions.value = []
     res.forEach(ele => {
         hostgroupOptions.value.push({
