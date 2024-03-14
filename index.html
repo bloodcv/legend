@@ -7,6 +7,37 @@
     <link rel="stylesheet" href="./reset.css" />
     <script src="https://cdn.tailwindcss.com?plugins=line-clamp"></script>
     <style>
+      .inner-wrap {
+        width: 1370px;
+        margin: 0 auto;
+      }
+      .left-menu-wrap {
+        padding: 100px 0 10px;
+        position: fixed;
+        height: 100vh;
+        left: 0;
+        overflow: hidden;
+      }
+      .right-content-wrap {
+        width: calc(88%+160px);
+        padding: 100px 0;
+        padding-left: 160px;
+        margin: 0 auto;
+      }
+      .menu-wrap {
+        display: flex;
+        flex-direction: column;
+      }
+      .menu-wrap li {
+        flex: 1;
+      }
+      .menu-wrap li a {
+        height: 73px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
       .menu-wrap li:last-child {
         border: none;
       }
@@ -160,76 +191,74 @@
       .full-height {
         height: 100vh;
       }
-      .left-menu-wrap {
-        padding-left: 10%;
-      }
-      .right-content-wrap {
-        padding: 100px 20% 100px 25%;
-      }
-      @media (max-width: 1700px) {
-        .left-menu-wrap {
-          padding-left: 12%;
+      @media screen and (max-width: 1441px) {
+        .inner-wrap {
+          width: 1250px;
         }
         .right-content-wrap {
-          padding-left: 28%;
+          width: calc(87%+160px);
         }
       }
-      @media (max-width: 1600px) {
-        .left-menu-wrap {
-          padding-left: 13%;
+      @media screen and (max-width: 1370px) {
+        .inner-wrap {
+          width: 1160px;
         }
         .right-content-wrap {
-          padding-left: 30%;
+          width: calc(86%+160px);
         }
       }
-      @media (max-width: 1470px) {
-        .left-menu-wrap {
-          padding-left: 14%;
+      @media screen and (max-width: 1300px) {
+        .inner-wrap {
+          width: 1070px;
         }
         .right-content-wrap {
-          padding-left: 32%;
+          width: calc(84%+160px);
         }
+      }
+      @media screen and (max-width: 1299px) {
         .item-wrap-w li {
-          width: 33.3333%;
+          width: 33.3333333%;
         }
       }
-      @media (max-width: 1380px) {
-        .left-menu-wrap {
-          padding-left: 16%;
+      @media screen and (max-width: 1250px) {
+        .inner-wrap {
+          width: 85%;
         }
         .right-content-wrap {
-          padding-left: 35%;
+          width: calc(84%+160px);
         }
       }
-      @media (max-width: 1300px) {
-        .left-menu-wrap {
-          padding-left: 13%;
-        }
+      @media screen and (max-width: 1200px) {
         .right-content-wrap {
-          padding-left: 34%;
+          width: calc(83%+160px);
         }
-        .item-wrap-w li {
-          width: 50%;
-        }
-      }
-      @media (max-width: 1180px) {
-        .left-menu-wrap {
-          padding-left: 10%;
-        }
-        .right-content-wrap {
-          padding-left: 34%;
-          padding-right: 15%;
-        }
-        .item-wrap-w li {
-          width: 50%;
-        }
-      }
-      @media (max-width: 1200px) {
         .header-tip {
           display: none;
         }
       }
-      @media (max-width: 1024px) {
+      @media screen and (max-width: 1100px) {
+        .right-content-wrap {
+          width: calc(82%+160px);
+        }
+      }
+      @media screen and (max-width: 1020px) {
+        .right-content-wrap {
+          width: calc(80%+160px);
+        }
+      }
+      @media screen and (max-width: 991px) {
+        .item-wrap-w li {
+          width: 50%;
+        }
+      }
+      @media screen and (max-width: 950px) {
+        .inner-wrap {
+          width: 100%;
+        }
+        .right-content-wrap {
+          width: 100%;
+          padding-left: 0;
+        }
         .header-wrap {
           display: none;
         }
@@ -238,9 +267,6 @@
         }
         .left-menu-wrap {
           display: none;
-        }
-        .right-content-wrap {
-          padding: 60px 0 50px 0;
         }
         .module-wrap {
           border-radius: 0px;
@@ -257,14 +283,69 @@
           padding-right: 20px;
         }
       }
+      @media screen and (max-height: 800px) {
+        .menu-wrap li a {
+          height: 67px;
+        }
+      }
+      @media screen and (max-height: 750px) {
+        .menu-wrap li a {
+          height: 62px;
+        }
+      }
+      @media screen and (max-height: 700px) {
+        .menu-wrap li a {
+          height: 55px;
+        }
+      }
+      @media screen and (max-height: 650px) {
+        .menu-wrap li a {
+          height: 51px;
+        }
+      }
+      @media screen and (max-height: 550px) {
+        .menu-wrap li a {
+          height: 44px;
+        }
+      }
+      @media screen and (max-height: 520px) {
+        .menu-wrap li a {
+          height: 45px;
+        }
+      }
+      @media screen and (max-height: 500px) {
+        .menu-wrap li a {
+          height: 41px;
+        }
+      }
+      @media screen and (max-height: 480px) {
+        .menu-wrap li a {
+          height: 39px;
+        }
+      }
+      @media screen and (max-height: 450px) {
+        .menu-wrap li a {
+          height: 36px;
+        }
+      }
+      @media screen and (max-height: 430px) {
+        .menu-wrap li a {
+          height: 34px;
+        }
+      }
+      @media screen and (max-height: 400px) {
+        .menu-wrap li a {
+          height: 31px;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="bg-[#F8FAFE]">
       <div id="top"></div>
-      <div class="h-full w-full my-0 mx-auto">
+      <div class="h-full inner-wrap">
         <header
-          class="mobile-header-wrap overflow-hidden transition-all duration-[400ms] flex-col full-height fixed top-0 left-0 right-0 bg-[#f2f2f2] z-[5]"
+          class="mobile-header-wrap overflow-hidden transition-all duration-[400ms] flex-col fixed top-0 left-0 right-0 bg-[#f2f2f2] z-[5]"
           id="MobileHeader">
           <div class="flex items-center justify-between pr-3">
             <div
@@ -390,9 +471,9 @@
         </header>
         <main class="flex justify-between w-full h-full">
           <!-- 左侧菜单 -->
-          <div class="py-[100px] fixed h-screen left-20 left-menu-wrap">
+          <div id="leftMenuWrap" class="left-menu-wrap">
             <ul
-              class="menu-wrap h-full overflow-y-auto w-40 mr-4 rounded-xl border border-solid border-[#F1F3F7] bg-white *:relative *:cursor-pointer *:border-b *:border-solid *:border-[#F1F3F7] *:text-base *:text-[#565656] *:w-full *:flex *:items-center *:justify-center *:*:py-5 *:*:text-center *:*:w-full *:*:inline-block *:*:transition-all *:*:duration-[400ms]">
+              class="menu-wrap max-h-full overflow-y-auto w-[150px] mr-4 rounded-xl border border-solid border-[#F1F3F7] bg-white *:relative *:cursor-pointer *:border-b *:border-solid *:border-[#F1F3F7] *:text-base *:text-[#565656] *:w-full *:flex *:items-center *:justify-center *:*:text-center *:*:w-full *:*:inline-block *:*:transition-all *:*:duration-[400ms]">
               <li>
                 <a href="https://www.baidu.com">续费充值</a>
               </li>
@@ -438,7 +519,7 @@
             </ul>
           </div>
           <!-- 右侧内容 -->
-          <div class="right-content-wrap w-screen flex flex-col space-y-10">
+          <div id="rightContentWrap" class="flex flex-col space-y-10 right-content-wrap">
             <!-- 内容区块 -->
             <!-- 一级 -->
             <div class="module-wrap">
@@ -1734,6 +1815,16 @@
           mobileHeader.classList.add("full-height");
         }
       };
+      window.onload = function() {
+        const rightContentWrap = document.querySelector('#rightContentWrap')
+        const leftMenuWrap = document.querySelector('#leftMenuWrap')
+        const changeLeftMenuWrapPosition = () => {
+          const left = rightContentWrap.offsetLeft + 'px'
+          leftMenuWrap.style.left = left
+        }
+        changeLeftMenuWrapPosition()
+        window.addEventListener('resize', changeLeftMenuWrapPosition)
+      }
     </script>
   </body>
 </html>
