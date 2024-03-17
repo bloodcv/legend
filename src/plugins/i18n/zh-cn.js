@@ -98,6 +98,11 @@ export default {
         }
     },
     main2: {
+        title: '主标题',
+        titleText: '主标题文字',
+        leftMenu: '左侧菜单',
+        rightMenu: '右侧菜单',
+        hostSec: '展示主机',
         rightBottomWarn: '告警',
         rightBottomCommon: '一般',
         rightBottomSerious: '严重',

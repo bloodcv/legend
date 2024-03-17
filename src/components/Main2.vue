@@ -12,6 +12,7 @@ import {
 } from "vue";
 import { KJUR } from "jsrsasign";
 import SvgIcon from "@/components/SvgIcon.vue";
+import UtilArea2 from "@/components/sub_area/UtilArea2.vue";
 
 /* {
   xAxis: {
@@ -95,7 +96,7 @@ const EnvInfoApi = "http://101.132.244.36/api/getHostNumber";
 const hostInfoApi = "http://101.132.244.36/api/getHostInfo"; // hostid 10084
 const menuNameApi = "http://101.132.244.36/api/getMenuList";
 const updateMenuApi = "http://101.132.244.36/api/saveMenu";
-const defaultTimeGetHostInfo = 5000; // 30s
+const defaultTimeGetHostInfo = 30000; // 30s
 const defaultTimeGetDeviceAndAlarm = 60000; // 1m
 const source = axios.CancelToken.source();
 
@@ -179,7 +180,7 @@ const setHostInfo = list => {
  * @param idx index in host list for current show host
  */
 const setHostDetail = (detail, idx) => {
-  console.log(detail);
+  // console.log(detail);
   Object.keys(alarmTypeData).map(_ => (alarmTypeData[_] = detail.alarm[_]));
   curHostIdx.value = idx;
   const {
@@ -242,7 +243,10 @@ const setHostDetail = (detail, idx) => {
       left: "33%",
     },
     legend: {
-      data: ["上行", "下行"],
+      data: ["下行", "上行"],
+      textStyle: {
+        color: '#fff'
+      }
     },
     tooltip: {
       trigger: "axis",
@@ -255,12 +259,12 @@ const setHostDetail = (detail, idx) => {
     yAxis: yAxisOption,
     series: [
       {
-        name: "上行",
+        name: "下行",
         data: [...thirdData.data[0]],
         type: "line",
       },
       {
-        name: "下行",
+        name: "上行",
         data: [...thirdData.data[1]],
         type: "line",
       },
@@ -269,6 +273,9 @@ const setHostDetail = (detail, idx) => {
   chartFourthInstance.setOption({
     title: {
       text: fourthData.name,
+      textStyle,
+      textAlign: "center",
+      left: "50%",
     },
     tooltip: {
       trigger: "axis",
@@ -437,7 +444,7 @@ window.addEventListener("beforeunload", cleanAction);
     <div class="header">
       <span>{{ menuNameData.name }}</span>
       <div class="tool-wrap">
-
+        <UtilArea2 />
       </div>
     </div>
     <a-row class="content-wrap">

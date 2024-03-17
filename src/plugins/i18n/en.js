@@ -98,9 +98,14 @@ export default {
         }
     },
     main2: {
-        rightBottomWarn: 'warn',
-        rightBottomCommon: 'common',
-        rightBottomSerious: 'serious',
-        rightBottomDisaster: 'disaster',
+        title: 'Main Title',
+        titleText: 'Main Title Text',
+        leftMenu: 'Left Menu',
+        rightMenu: 'Right Menu',
+        hostSec: 'Show Hosts',
+        rightBottomWarn: 'Warn',
+        rightBottomCommon: 'Common',
+        rightBottomSerious: 'Serious',
+        rightBottomDisaster: 'Disaster',
     }
 }
