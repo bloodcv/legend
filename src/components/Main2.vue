@@ -14,27 +14,6 @@ import { KJUR } from "jsrsasign";
 import SvgIcon from "@/components/SvgIcon.vue";
 import UtilArea2 from "@/components/sub_area/UtilArea2.vue";
 
-/* {
-  xAxis: {
-    type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  },
-  yAxis: {
-    type: 'value',
-    splitLine: {
-      show: true,
-      lineStyle: {
-        color: 'rgba(255, 255, 255, 0.15)'
-      }
-    }
-  },
-  series: [
-    {
-      data: [150, 230, 224, 218, 135, 147, 260],
-      type: 'line'
-    }
-  ]
-} */
 const lineOption = {
   grid: {
     left: "3%",
@@ -57,45 +36,10 @@ const yAxisOption = {
 const textStyle = {
   color: "#fff",
 };
-/* {
-  title: {
-    text: 'Stacked Line',
-  },
-  tooltip: {
-    trigger: 'axis'
-  },
-  legend: {
-    data: ['Email', 'Union Ads']
-  },
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true
-  },
-  xAxis: {
-    boundaryGap: false,
-    // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  },
-  series: [
-    {
-      name: 'Email',
-      type: 'line',
-      stack: 'Total',
-      data: [120, 132, 101, 134, 90, 230, 210]
-    },
-    {
-      name: 'Union Ads',
-      type: 'line',
-      stack: 'Total',
-      data: [220, 182, 191, 234, 290, 330, 310]
-    },
-  ]
-} */
 const EnvInfoApi = "http://101.132.244.36/api/getHostNumber";
 const hostInfoApi = "http://101.132.244.36/api/getHostInfo"; // hostid 10084
 const menuNameApi = "http://101.132.244.36/api/getMenuList";
-const updateMenuApi = "http://101.132.244.36/api/saveMenu";
+// const updateMenuApi = "http://101.132.244.36/api/saveMenu";
 const defaultTimeGetHostInfo = 30000; // 30s
 const defaultTimeGetDeviceAndAlarm = 60000; // 1m
 const source = axios.CancelToken.source();
@@ -141,6 +85,7 @@ const deviceAndAlarmUpdate = ref();
 const curHostIdx = ref(-1);
 const nextHostIdx = ref(0);
 const hostUpdate = ref();
+const originHostList = ref([])
 const hostList = ref([]);
 const hostMap = ref(new Map());
 const chartFirstRef = ref();
@@ -168,6 +113,7 @@ const resolveNumber = (day = 0) => {
  * set host map which type is Map<string, hostIdx>
  */
 const setHostInfo = list => {
+  originHostList.value = [...JSON.parse(JSON.stringify(list))]
   hostList.value = [...list];
   const map = new Map();
   list.map((_, idx) => map.set(_.hostid, idx));
@@ -408,6 +354,21 @@ const initChart = () => {
   });
 };
 
+const updateMenuData = (params) => {
+  Object.keys(params).map(_ => menuNameData[_] = params[_])
+}
+
+const changeHostList = (param) => {
+  hostUpdate.value = null;
+  const newHostList = originHostList.value.filter((_ => {
+    return param.includes(_.hostid)
+  }))
+  hostList.value = [...newHostList]
+  curHostIdx.value = -1
+  nextHostIdx.value = 0
+  beginHostUpdate()
+}
+
 onMounted(async () => {
   const auth = window.localStorage.getItem("code");
   // init update currentTime bg one second
@@ -444,7 +405,7 @@ window.addEventListener("beforeunload", cleanAction);
     <div class="header">
       <span>{{ menuNameData.name }}</span>
       <div class="tool-wrap">
-        <UtilArea2 />
+        <UtilArea2 :menuData="menuNameData" :originHostList="originHostList" :hostList="hostList" @updateMenuData="updateMenuData" @changeHostList="changeHostList" />
       </div>
     </div>
     <a-row class="content-wrap">
