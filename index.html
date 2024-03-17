@@ -1,1838 +1,1822 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="./reset.css" />
-    <script src="https://cdn.tailwindcss.com?plugins=line-clamp"></script>
-    <style>
-      .inner-wrap {
-        width: 1370px;
-        margin: 0 auto;
-      }
-      .left-menu-wrap {
-        padding: 100px 0 10px;
-        position: fixed;
-        height: 100vh;
-        left: 0;
-        overflow: hidden;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="./reset.css" />
+  <script src="https://cdn.tailwindcss.com?plugins=line-clamp"></script>
+  <style>
+    .header-wrap-inner {
+      width: 1370px;
+    }
+    .inner-wrap {
+      width: 1370px;
+      margin: 0 auto;
+    }
+    .left-menu-wrap {
+      display: none;
+      padding: 118px 0 20px;
+      position: fixed;
+      height: 100vh;
+      left: 0;
+      overflow: hidden;
+    }
+    .right-content-wrap {
+      width: calc(88% + 160px);
+      padding: 118px 0 100px;
+      padding-left: 160px;
+      margin: 0 auto;
+    }
+    .menu-wrap {
+      display: flex;
+      flex-direction: column;
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+    .menu-wrap::-webkit-scrollbar {
+      display: none;
+    }
+    .menu-wrap li {
+      flex: 1;
+    }
+    .menu-wrap li a {
+      font-size: 15px;
+      height: 73px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .menu-wrap li:last-child {
+      border: none;
+    }
+    .menu-wrap li.current a,
+    .menu-wrap li a:hover {
+      color: #13e0bc;
+      box-shadow: 0 30px 28px -16px rgba(0, 0, 0, 0.26);
+      transform: translate(0, 1px);
+      font-weight: 400;
+    }
+    .tool-wrap a{
+      color: #777;
+    }
+    .tool-wrap a:hover {
+      width: 85px;
+      transform: translate(0, 3px);
+      box-shadow: -1px 5px 10px -6px rgb(0 0 0 / 51%);
+    }
+    .tool-wrap a:hover span {
+      color: #13e0bc;
+    }
+    .first-level-item-wrap .item-bg-wrap {
+      width: 100%;
+      height: 106px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s;
+      border-radius: 6px;
+    }
+    .first-level-item-wrap .item-bg-wrap:hover {
+      box-shadow: 0px 9px 9px -5px rgb(0 0 0 / 51%);
+      transform: translate(0, -2px);
+    }
+    .first-level-item-wrap .item-bg-wrap img {
+      transition: all 0.4s;
+    }
+    .first-level-item-wrap .item-bg-wrap:hover img {
+      transform: scale(1.3) rotate(13deg);
+    }
+    .first-level-item-wrap .item-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #565656;
+      display: block;
+    }
+    .first-level-item-wrap .item-tip {
+      font-size: 12px;
+      font-weight: 400;
+      color: #a8a7a7;
+      display: block;
+    }
+    .second-level-item-wrap li a {
+      transition: all 0.2s;
+    }
+    .second-level-item-wrap li a:hover {
+      box-shadow: 0 30px 28px -16px rgba(0, 0, 0, 0.26);
+      transform: translate(0, -4px);
+    }
+    .second-level-item-wrap .item-title-wrap {
+      display: flex;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+    .second-level-item-wrap .item-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #333;
+      display: block;
+      margin-left: 8px;
+    }
+    .second-level-item-wrap li a,
+    .main-level-item-wrap li a {
+      padding-right: 10px;
+    }
+    .main-level-item-wrap li a .item-tip,
+    .second-level-item-wrap .item-tip {
+      font-size: 12px;
+      color: rgba(102, 102, 102, 0.55);
+      display: block;
+    }
+    .main-level-item-wrap li a {
+      box-shadow: 0px 6px 12px 0px #e8ebf9;
+    }
+    .main-level-item-wrap li a .item-title {
+      color: #59aaff;
+      font-size: 14px;
+      font-weight: 400;
+    }
+    .form-wrap {
+      padding-right: 80px;
+    }
+    .form-wrap label {
+      width: 120px;
+      min-width: 85px;
+      text-align: right;
+    }
+    .form-wrap label span {
+      font-size: 14px;
+      color: #565656;
+      position: relative;
+      padding-left: 10px;
+    }
+    .form-wrap .form-label-need span::before {
+      content: "*";
+      color: #ea1c1c;
+      font-size: 14px;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .form-wrap input {
+      flex: 1;
+      padding: 10px 15px;
+      margin-left: 15px;
+      border: 1px solid #c8c9cc;
+      border-radius: 8px;
+      color: #565656;
+    }
+    .form-wrap input:disabled {
+      background-color: #e4e4e5;
+    }
+    .form-wrap .submit-btn {
+      background: linear-gradient(180deg, #36eedc 0%, #19d8b6 100%);
+      border-radius: 8px;
+      font-size: 14px;
+      padding: 10px 30px;
+      margin-left: 135px;
+      width: fit-content;
+      color: #fff;
+    }
+    .item-wrap-w li {
+      width: 25%;
+    }
+    .module-wrap {
+      width: 100%;
+      border-radius: 8px;
+      background-color: #fff;
+      border: 1px solid #edecec;
+      padding: 24px 16px 20px;
+    }
+    .header-tip {
+      display: flex;
+    }
+    .header-wrap {
+      display: flex;
+    }
+    .mobile-header-wrap {
+      height: 45px;
+      display: none;
+    }
+    .full-height {
+      height: 100vh;
+    }
+    @media screen and (max-width: 1441px) {
+      .inner-wrap, .header-wrap-inner {
+        width: 1250px;
       }
       .right-content-wrap {
-        width: calc(88%+160px);
-        padding: 100px 0;
-        padding-left: 160px;
-        margin: 0 auto;
+        width: calc(87% + 160px);
       }
-      .menu-wrap {
-        display: flex;
-        flex-direction: column;
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox */
+    }
+    @media screen and (max-width: 1370px) {
+      .inner-wrap, .header-wrap-inner {
+        width: 1160px;
       }
-      .menu-wrap::-webkit-scrollbar {
-        display: none;
+      .right-content-wrap {
+        width: calc(86% + 160px);
       }
-      .menu-wrap li {
-        flex: 1;
+    }
+    @media screen and (max-width: 1300px) {
+      .inner-wrap, .header-wrap-inner {
+        width: 1070px;
       }
-      .menu-wrap li a {
-        height: 73px;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .right-content-wrap {
+        width: calc(84% + 160px);
       }
-      .menu-wrap li:last-child {
-        border: none;
-      }
-      .menu-wrap li.current a,
-      .menu-wrap li a:hover {
-        color: #13e0bc;
-        box-shadow: 0 30px 28px -16px rgba(0, 0, 0, 0.26);
-        transform: translate(0, 1px);
-        font-weight: 400;
-      }
-      .tool-wrap a:hover {
-        width: 85px;
-        transform: translate(0, 3px);
-        box-shadow: -1px 5px 10px -6px rgb(0 0 0 / 51%);
-      }
-      .tool-wrap a:hover span {
-        color: #13e0bc;
-      }
-      .first-level-item-wrap .item-bg-wrap {
-        width: 100%;
-        height: 106px;
-        background-size: cover;
-        background-repeat: no-repeat;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.4s;
-        border-radius: 6px;
-      }
-      .first-level-item-wrap .item-bg-wrap:hover {
-        box-shadow: 0px 9px 9px -5px rgb(0 0 0 / 51%);
-        transform: translate(0, -2px);
-      }
-      .first-level-item-wrap .item-bg-wrap img {
-        transition: all 0.4s;
-      }
-      .first-level-item-wrap .item-bg-wrap:hover img {
-        transform: scale(1.3) rotate(13deg);
-      }
-      .first-level-item-wrap .item-title {
-        font-size: 14px;
-        font-weight: 500;
-        color: #565656;
-        display: block;
-      }
-      .first-level-item-wrap .item-tip {
-        font-size: 12px;
-        font-weight: 400;
-        color: #a8a7a7;
-        display: block;
-      }
-      .second-level-item-wrap li a {
-        transition: all 0.2s;
-      }
-      .second-level-item-wrap li a:hover {
-        box-shadow: 0 30px 28px -16px rgba(0, 0, 0, 0.26);
-        transform: translate(0, -4px);
-      }
-      .second-level-item-wrap .item-title-wrap {
-        display: flex;
-        align-items: center;
-        margin-bottom: 7px;
-      }
-      .second-level-item-wrap .item-title {
-        font-size: 14px;
-        font-weight: 700;
-        color: #333;
-        display: block;
-        margin-left: 8px;
-      }
-      .second-level-item-wrap li a,
-      .main-level-item-wrap li a {
-        padding-right: 10px;
-      }
-      .main-level-item-wrap li a .item-tip,
-      .second-level-item-wrap .item-tip {
-        font-size: 12px;
-        color: rgba(102, 102, 102, 0.55);
-        display: block;
-      }
-      .main-level-item-wrap li a {
-        box-shadow: 0px 6px 12px 0px #e8ebf9;
-      }
-      .main-level-item-wrap li a .item-title {
-        color: #59aaff;
-        font-size: 14px;
-        font-weight: 400;
-      }
-      .form-wrap {
-        padding-right: 80px;
-      }
-      .form-wrap label {
-        width: 120px;
-        min-width: 85px;
-        text-align: right;
-      }
-      .form-wrap label span {
-        font-size: 14px;
-        color: #565656;
-        position: relative;
-        padding-left: 10px;
-      }
-      .form-wrap .form-label-need span::before {
-        content: "*";
-        color: #ea1c1c;
-        font-size: 14px;
-        position: absolute;
-        left: 0;
-        top: 0;
-      }
-      .form-wrap input {
-        flex: 1;
-        padding: 10px 15px;
-        margin-left: 15px;
-        border: 1px solid #c8c9cc;
-        border-radius: 8px;
-        color: #565656;
-      }
-      .form-wrap input:disabled {
-        background-color: #e4e4e5;
-      }
-      .form-wrap .submit-btn {
-        background: linear-gradient(180deg, #36eedc 0%, #19d8b6 100%);
-        border-radius: 8px;
-        font-size: 14px;
-        padding: 10px 30px;
-        margin-left: 135px;
-        width: fit-content;
-        color: #fff;
-      }
+    }
+    @media screen and (max-width: 1299px) {
       .item-wrap-w li {
-        width: 25%;
+        width: 33.3333333%;
       }
-      .module-wrap {
-        width: 100%;
-        border-radius: 8px;
-        background-color: #fff;
-        border: 1px solid #edecec;
-        padding: 24px 16px 20px;
+    }
+    @media screen and (max-width: 1250px) {
+      .inner-wrap, .header-wrap-inner {
+        width: 85%;
+      }
+      .right-content-wrap {
+        width: calc(84% + 160px);
+      }
+    }
+    @media screen and (max-width: 1200px) {
+      .right-content-wrap {
+        width: calc(83% + 160px);
       }
       .header-tip {
-        display: flex;
-      }
-      .header-wrap {
-        display: flex;
-      }
-      .mobile-header-wrap {
-        height: 45px;
         display: none;
       }
-      .full-height {
-        height: 100vh;
+    }
+    @media screen and (max-width: 1100px) {
+      .right-content-wrap {
+        width: calc(82% + 160px);
       }
-      @media screen and (max-width: 1441px) {
-        .inner-wrap {
-          width: 1250px;
-        }
-        .right-content-wrap {
-          width: calc(87%+160px);
-        }
+    }
+    @media screen and (max-width: 1020px) {
+      .right-content-wrap {
+        width: calc(80% + 160px);
       }
-      @media screen and (max-width: 1370px) {
-        .inner-wrap {
-          width: 1160px;
-        }
-        .right-content-wrap {
-          width: calc(86%+160px);
-        }
+    }
+    @media screen and (max-width: 991px) {
+      .item-wrap-w li {
+        width: 50%;
       }
-      @media screen and (max-width: 1300px) {
-        .inner-wrap {
-          width: 1070px;
-        }
-        .right-content-wrap {
-          width: calc(84%+160px);
-        }
+    }
+    @media screen and (max-width: 950px) {
+      .inner-wrap, .header-wrap-inner {
+        width: 100%;
       }
-      @media screen and (max-width: 1299px) {
-        .item-wrap-w li {
-          width: 33.3333333%;
-        }
+      .right-content-wrap {
+        width: 100%;
+        padding-left: 0;
       }
-      @media screen and (max-width: 1250px) {
-        .inner-wrap {
-          width: 85%;
-        }
-        .right-content-wrap {
-          width: calc(84%+160px);
-        }
+      .header-wrap {
+        display: none;
       }
-      @media screen and (max-width: 1200px) {
-        .right-content-wrap {
-          width: calc(83%+160px);
-        }
-        .header-tip {
-          display: none;
-        }
+      .mobile-header-wrap {
+        display: flex;
       }
-      @media screen and (max-width: 1100px) {
-        .right-content-wrap {
-          width: calc(82%+160px);
-        }
+      .left-menu-wrap {
+        display: none !important;
       }
-      @media screen and (max-width: 1020px) {
-        .right-content-wrap {
-          width: calc(80%+160px);
-        }
+      .module-wrap {
+        border-radius: 0px;
+        border-color: transparent;
       }
-      @media screen and (max-width: 991px) {
-        .item-wrap-w li {
-          width: 50%;
-        }
+      .banner-img {
+        border-radius: 0 !important;
+        border-color: transparent !important;
       }
-      @media screen and (max-width: 950px) {
-        .inner-wrap {
-          width: 100%;
-        }
-        .right-content-wrap {
-          width: 100%;
-          padding-left: 0;
-        }
-        .header-wrap {
-          display: none;
-        }
-        .mobile-header-wrap {
-          display: flex;
-        }
-        .left-menu-wrap {
-          display: none;
-        }
-        .module-wrap {
-          border-radius: 0px;
-          border-color: transparent;
-        }
-        .banner-img {
-          border-radius: 0 !important;
-          border-color: transparent !important;
-        }
-        .right-floating-menu {
-          display: none;
-        }
-        .form-wrap {
-          padding-right: 20px;
-        }
+      .right-floating-menu {
+        display: none;
       }
-      @media screen and (max-height: 800px) {
-        .menu-wrap li a {
-          height: 67px;
-        }
+      .form-wrap {
+        padding-right: 20px;
       }
-      @media screen and (max-height: 750px) {
-        .menu-wrap li a {
-          height: 62px;
-        }
+    }
+    @media screen and (max-height: 800px) {
+      .menu-wrap li a {
+        height: 67px;
       }
-      @media screen and (max-height: 700px) {
-        .menu-wrap li a {
-          height: 55px;
-        }
+    }
+    @media screen and (max-height: 750px) {
+      .menu-wrap li a {
+        height: 62px;
       }
-      @media screen and (max-height: 650px) {
-        .menu-wrap li a {
-          height: 51px;
-        }
+    }
+    @media screen and (max-height: 700px) {
+      .menu-wrap li a {
+        height: 55px;
       }
-      @media screen and (max-height: 550px) {
-        .menu-wrap li a {
-          height: 44px;
-        }
+    }
+    @media screen and (max-height: 650px) {
+      .menu-wrap li a {
+        height: 51px;
       }
-      @media screen and (max-height: 520px) {
-        .menu-wrap li a {
-          height: 45px;
-        }
+    }
+    @media screen and (max-height: 550px) {
+      .menu-wrap li a {
+        height: 44px;
       }
-      @media screen and (max-height: 500px) {
-        .menu-wrap li a {
-          height: 41px;
-        }
+    }
+    @media screen and (max-height: 520px) {
+      .menu-wrap li a {
+        height: 45px;
       }
-      @media screen and (max-height: 480px) {
-        .menu-wrap li a {
-          height: 39px;
-        }
+    }
+    @media screen and (max-height: 500px) {
+      .menu-wrap li a {
+        height: 41px;
       }
-      @media screen and (max-height: 450px) {
-        .menu-wrap li a {
-          height: 36px;
-        }
+    }
+    @media screen and (max-height: 480px) {
+      .menu-wrap li a {
+        height: 39px;
       }
-      @media screen and (max-height: 430px) {
-        .menu-wrap li a {
-          height: 34px;
-        }
+    }
+    @media screen and (max-height: 450px) {
+      .menu-wrap li a {
+        height: 36px;
       }
-      @media screen and (max-height: 400px) {
-        .menu-wrap li a {
-          height: 31px;
-        }
+    }
+    @media screen and (max-height: 430px) {
+      .menu-wrap li a {
+        height: 34px;
       }
-    </style>
-  </head>
-  <body>
-    <div class="bg-[#F8FAFE]">
-      <div id="top"></div>
-      <div class="h-full inner-wrap">
-        <header
-          class="mobile-header-wrap overflow-hidden transition-all duration-[400ms] flex-col fixed top-0 left-0 right-0 bg-[#f2f2f2] z-[5]"
-          id="MobileHeader">
-          <div class="flex items-center justify-between pr-3">
-            <div
-              class="w-[45px] h-full p-2 flex items-center justify-center"
-              onclick="toggleMenu()">
-              <img src="./menu.png" width="35" height="35" />
-            </div>
-            <h1 class="font-bold text-lg text-black">图书馆</h1>
-            <img
-              src="./ava.png"
-              width="35"
-              height="35"
-              class="border-[2px] border-solid rounded-full border-[#14B606]" />
-          </div>
-          <div class="flex bg-[#14B606] items-center justify-center px-8 py-1">
+    }
+    @media screen and (max-height: 400px) {
+      .menu-wrap li a {
+        height: 31px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-[#F8FAFE]">
+  <div id="top"></div>
+  <div class="h-full inner-wrap">
+    <header
+            class="mobile-header-wrap overflow-hidden transition-all duration-[400ms] flex-col fixed top-0 left-0 right-0 bg-[#f2f2f2] z-[5]"
+            id="MobileHeader">
+      <div class="flex items-center justify-between pr-3">
+        <div
+                class="w-[45px] h-full p-2 flex items-center justify-center"
+                onclick="toggleMenu()">
+          <img src="./menu.png" width="35" height="35" />
+        </div>
+        <h1 class="font-bold text- lg text-black">图书馆</h1>
+        <img
+                src="./ava.png"
+                width="35"
+                height="35"
+                class="border-[2px] border-solid rounded-full border-[#14B606]" />
+      </div>
+      <div class="flex bg-[#14B606] items-center justify-center px-8 py-1">
+        <img src="./notice.png" width="22" height="16" />
+        <span class="text-white text-sm ml-2.5"
+        >公告: 账号仅限购买人使用，禁止分享，违者封号！</span
+        >
+      </div>
+      <div
+              class="flex items-center h-fit p-[4px] bg-white shadow-[0px_2px_4px_0px_rgba(232,235,249,0.5)]">
+            <span
+                    class="text-[#898989] text-sm px-[15px] relative after:content-[''] after:absolute after:right-0 after:w-[1px] after:top-[-2px] after:bottom-[-2px] after:bg-[#DCDEE0]"
+            >激活码激活</span
+            >
+        <input
+                type="text"
+                placeholder="请直接粘贴激活码，请勿手动输入"
+                class="text-sm text-black w-[240px] focus:outline-none px-[15px] flex-1" />
+        <button
+                class="send-code w-[30px] h-[30px] rounded-full bg-[#69C0FF] flex items-center justify-center">
+          <img src="send.png" class="w-[18px] h-[18px] block" />
+        </button>
+      </div>
+      <div class="flex-1 p-4 overflow-y-auto">
+        <ul
+                class="h-fit flex flex-wrap *:w-1/3 *:px-[2px] *:py-[5px] *:overflow-hidden *:*:bg-black/80 *:*:px-2 *:*:py-4 *:*:text-white *:*:text-sm *:*:font-medium *:*:flex *:*:items-center *:*:justify-center *:*:min-h-[80px]">
+          <li>
+            <a href="https://www.baidu.com">续费充值</a>
+          </li>
+          <li>
+            <a>中文数据</a>
+          </li>
+          <li >
+            <a>英文数据</a>
+          </li>
+          <li>
+            <a>Ele数据</a>
+          </li>
+          <li>
+            <a>法律数据</a>
+          </li>
+          <li>
+            <a>法律实务</a>
+          </li>
+          <li>
+            <a>经济金融</a>
+          </li>
+          <li>
+            <a>稀有定制</a>
+          </li>
+          <li>
+            <a>高校图书</a>
+          </li>
+          <li>
+            <a>教育资源</a>
+          </li>
+          <li>
+            <a>多媒体库</a>
+          </li>
+          <li>
+            <a>代理系统</a>
+          </li>
+          <li>
+            <a>使用提示</a>
+          </li>
+          <li>
+            <a>退出</a>
+          </li>
+        </ul>
+      </div>
+    </header>
+    <!-- 顶部信息 -->
+    <header
+            class="justify-center items-center fixed top-0 left-0 right-0 h-[80px] bg-white/30 z-10 backdrop-blur header-wrap">
+      <div class="header-wrap-inner h-full flex justify-between items-center">
+        <div class="flex items-center">
+          <h1 class="text-3xl font-medium text-black">图书馆</h1>
+          <div
+                  class="rounded-full bg-[#14B606] items-center justify-center px-8 py-1 ml-5 header-tip">
             <img src="./notice.png" width="22" height="16" />
             <span class="text-white text-sm ml-2.5"
-              >公告: 账号仅限购买人使用，禁止分享，违者封号！</span
+            >公告: 账号仅限购买人使用，禁止分享，违者封号！</span
             >
           </div>
-          <div
-            class="flex items-center h-fit p-[4px] bg-white shadow-[0px_2px_4px_0px_rgba(232,235,249,0.5)]">
-            <span
-              class="text-[#898989] text-sm px-[15px] relative after:content-[''] after:absolute after:right-0 after:w-[1px] after:top-[-2px] after:bottom-[-2px] after:bg-[#DCDEE0]"
+        </div>
+        <div
+                class="flex items-center h-fit p-[4px] rounded-full bg-white shadow-[0px_2px_4px_0px_rgba(232,235,249,0.5)]">
+              <span
+                      class="text-[#898989] text-sm px-[15px] relative after:content-[''] after:absolute after:right-0 after:w-[1px] after:top-[-2px] after:bottom-[-2px] after:bg-[#DCDEE0]"
               >激活码激活</span
-            >
-            <input
-              type="text"
-              placeholder="请直接粘贴激活码，请勿手动输入"
-              class="text-sm text-black w-[240px] focus:outline-none px-[15px] flex-1" />
-            <button
-              class="send-code w-[30px] h-[30px] rounded-full bg-[#69C0FF] flex items-center justify-center">
-              <img src="send.png" class="w-[18px] h-[18px] block" />
-            </button>
-          </div>
-          <div class="flex-1 p-4 overflow-y-auto">
-            <ul
-              class="h-fit flex flex-wrap *:w-1/3 *:px-[2px] *:py-[5px] *:overflow-hidden *:*:bg-black/80 *:*:px-2 *:*:py-4 *:*:text-white *:*:text-sm *:*:font-medium *:*:flex *:*:items-center *:*:justify-center *:*:min-h-[80px]">
-              <li>
-                <a href="https://www.baidu.com">续费充值</a>
-              </li>
-              <li>
-                <a>CH中文数据库</a>
-              </li>
-              <li class="current">
-                <a>EN英文数据库</a>
-              </li>
-              <li>
-                <a>Elsevier数据库</a>
-              </li>
-              <li>
-                <a>法律数据库</a>
-              </li>
-              <li>
-                <a>法律实务库</a>
-              </li>
-              <li>
-                <a>经济金融库</a>
-              </li>
-              <li>
-                <a>稀有定制区</a>
-              </li>
-              <li>
-                <a>高校图书馆</a>
-              </li>
-              <li>
-                <a>教育资源库</a>
-              </li>
-              <li>
-                <a>多媒体学习库</a>
-              </li>
-              <li>
-                <a>代理系统</a>
-              </li>
-              <li>
-                <a>使用提示</a>
-              </li>
-              <li>
-                <a>退出</a>
-              </li>
-            </ul>
-          </div>
-        </header>
-        <!-- 顶部信息 -->
-        <header
-          class="justify-between items-center fixed top-0 left-0 right-[20px] px-20 h-[80px] bg-white/30 z-10 backdrop-blur header-wrap">
-          <div class="flex items-center">
-            <h1 class="text-3xl font-medium text-black">图书馆</h1>
-            <div
-              class="rounded-full bg-[#14B606] items-center justify-center px-8 py-1 ml-5 header-tip">
-              <img src="./notice.png" width="22" height="16" />
-              <span class="text-white text-sm ml-2.5"
-                >公告: 账号仅限购买人使用，禁止分享，违者封号！</span
               >
-            </div>
-          </div>
-          <div
-            class="flex items-center h-fit p-[4px] rounded-full bg-white shadow-[0px_2px_4px_0px_rgba(232,235,249,0.5)]">
-            <span
-              class="text-[#898989] text-sm px-[15px] relative after:content-[''] after:absolute after:right-0 after:w-[1px] after:top-[-2px] after:bottom-[-2px] after:bg-[#DCDEE0]"
-              >激活码激活</span
+          <input
+                  type="text"
+                  placeholder="请直接粘贴激活码，请勿手动输入"
+                  class="text-sm text-black w-[240px] focus:outline-none px-[15px]" />
+          <button
+                  class="send-code w-[30px] h-[30px] rounded-full bg-[#69C0FF] flex items-center justify-center">
+            <img src="send.png" class="w-[18px] h-[18px] block" />
+          </button>
+        </div>
+        <div>
+          <div class="flex flex-col items-center">
+            <img
+                    src="./ava.png"
+                    width="50"
+                    height="50"
+                    class="border-[3px] border-solid rounded-full border-[#14B606]" />
+            <span class="mt-1 text-xs text-black font-semibold"
+            >Hi bh89757</span
             >
-            <input
-              type="text"
-              placeholder="请直接粘贴激活码，请勿手动输入"
-              class="text-sm text-black w-[240px] focus:outline-none px-[15px]" />
-            <button
-              class="send-code w-[30px] h-[30px] rounded-full bg-[#69C0FF] flex items-center justify-center">
-              <img src="send.png" class="w-[18px] h-[18px] block" />
-            </button>
-          </div>
-          <div>
-            <div class="flex flex-col items-center">
-              <img
-                src="./ava.png"
-                width="50"
-                height="50"
-                class="border-[3px] border-solid rounded-full border-[#14B606]" />
-              <span class="mt-1 text-xs text-black font-semibold"
-                >Hi bh89757</span
-              >
-            </div>
-          </div>
-        </header>
-        <main class="flex justify-between w-full h-full">
-          <!-- 左侧菜单 -->
-          <div id="leftMenuWrap" class="left-menu-wrap">
-            <ul
-              class="menu-wrap max-h-full overflow-y-auto w-[150px] mr-4 rounded-xl border border-solid border-[#F1F3F7] bg-white *:relative *:cursor-pointer *:border-b *:border-solid *:border-[#F1F3F7] *:text-base *:text-[#565656] *:w-full *:flex *:items-center *:justify-center *:*:text-center *:*:w-full *:*:inline-block *:*:transition-all *:*:duration-[400ms]">
-              <li>
-                <a href="https://www.baidu.com">续费充值</a>
-              </li>
-              <li>
-                <a>CH中文数据库</a>
-              </li>
-              <li class="current">
-                <a>EN英文数据库</a>
-              </li>
-              <li>
-                <a>Elsevier数据库</a>
-              </li>
-              <li>
-                <a>法律数据库</a>
-              </li>
-              <li>
-                <a>法律实务库</a>
-              </li>
-              <li>
-                <a>经济金融库</a>
-              </li>
-              <li>
-                <a>稀有定制区</a>
-              </li>
-              <li>
-                <a>高校图书馆</a>
-              </li>
-              <li>
-                <a>教育资源库</a>
-              </li>
-              <li>
-                <a>多媒体学习库</a>
-              </li>
-              <li>
-                <a>代理系统</a>
-              </li>
-              <li>
-                <a>使用提示</a>
-              </li>
-              <li>
-                <a>退出</a>
-              </li>
-            </ul>
-          </div>
-          <!-- 右侧内容 -->
-          <div
-            id="rightContentWrap"
-            class="flex flex-col space-y-10 right-content-wrap">
-            <!-- 内容区块 -->
-            <!-- 一级 -->
-            <div class="module-wrap">
-              <div class="flex items-center mb-5">
-                <h3
-                  id="level1-part1"
-                  class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
-                  一级第一
-                </h3>
-                <div class="flex items-center ml-2">
-                  <img src="./leftArrow.svg" width="10" height="10" />
-                  <a
-                    class="text-sm text-[#4EE0C6] ml-2"
-                    href="#"
-                    onClick="javascript:history.go(-1);"
-                    >返回上一页</a
-                  >
-                </div>
-              </div>
-              <div>
-                <ul
-                  class="first-level-item-wrap flex flex-wrap item-wrap-w *:px-2 *:pb-5">
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="module-wrap">
-              <div class="flex items-center mb-5">
-                <h3
-                  id="level1-part2"
-                  class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
-                  一级第二
-                </h3>
-                <div class="flex items-center ml-2">
-                  <img src="./leftArrow.svg" width="10" height="10" />
-                  <a
-                    class="text-sm text-[#4EE0C6] ml-2"
-                    href="#"
-                    onClick="javascript:history.go(-1);"
-                    >返回上一页</a
-                  >
-                </div>
-              </div>
-              <div>
-                <ul
-                  class="first-level-item-wrap flex flex-wrap item-wrap-w *:px-2 *:pb-5">
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="module-wrap">
-              <div class="flex items-center mb-5">
-                <h3
-                  id="level1-part3"
-                  class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
-                  一级第三
-                </h3>
-                <div class="flex items-center ml-2">
-                  <img src="./leftArrow.svg" width="10" height="10" />
-                  <a
-                    class="text-sm text-[#4EE0C6] ml-2"
-                    href="#"
-                    onClick="javascript:history.go(-1);"
-                    >返回上一页</a
-                  >
-                </div>
-              </div>
-              <div>
-                <ul
-                  class="first-level-item-wrap flex flex-wrap item-wrap-w *:px-2 *:pb-5">
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div
-                        class="item-bg-wrap"
-                        style="background-image: url(./items-bg.png)">
-                        <img src="./logo.png" width="40" height="40" />
-                      </div>
-                      <h4 class="item-title">Omi录屏专家</h4>
-                      <span class="item-tip">屏幕录像工具</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <!-- 二级 -->
-            <div>
-              <img
-                src="./top-img.png"
-                class="w-full h-[360px] rounded-lg bg-white border border-solid border-[#EDECEC] mb-5 banner-img" />
-              <div class="module-wrap">
-                <div class="flex items-center mb-5">
-                  <h3
-                    id="level2-part1"
-                    class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
-                    二级第一
-                  </h3>
-                  <div class="flex items-center ml-2">
-                    <img src="./leftArrow.svg" width="10" height="10" />
-                    <a
-                      class="text-sm text-[#4EE0C6] ml-2"
-                      href="#"
-                      onClick="javascript:history.go(-1);"
-                      >返回上一页</a
-                    >
-                  </div>
-                </div>
-                <div>
-                  <ul
-                    class="second-level-item-wrap flex flex-wrap item-wrap-w *:px-2 *:pb-5 *:*:pl-[18px] *:*:py-[10px] *:*:w-full *:*:flex *:*:flex-col *:*:bg-[#f6f6f6] *:*:rounded-lg">
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div>
-              <img
-                src="./top-img.png"
-                class="w-full h-[360px] rounded-lg bg-white border border-solid border-[#EDECEC] mb-5 banner-img" />
-              <div class="module-wrap">
-                <div class="flex items-center mb-5">
-                  <h3
-                    id="level2-part2"
-                    class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
-                    二级第二
-                  </h3>
-                  <div class="flex items-center ml-2">
-                    <img src="./leftArrow.svg" width="10" height="10" />
-                    <a
-                      class="text-sm text-[#4EE0C6] ml-2"
-                      href="#"
-                      onClick="javascript:history.go(-1);"
-                      >返回上一页</a
-                    >
-                  </div>
-                </div>
-                <div>
-                  <ul
-                    class="second-level-item-wrap flex flex-wrap item-wrap-w *:px-2 *:pb-5 *:*:pl-[18px] *:*:py-[10px] *:*:w-full *:*:flex *:*:flex-col *:*:bg-[#f6f6f6] *:*:rounded-lg">
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <div class="item-title-wrap">
-                          <img
-                            src="./logo.png"
-                            width="32"
-                            height="32"
-                            class="rounded-full" />
-                          <h4 class="item-title">Midjourney</h4>
-                        </div>
-                        <span class="item-tip">文章文献代下(免费)</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <!-- 三级 -->
-            <div class="module-wrap">
-              <div class="flex items-center mb-5">
-                <h3
-                  id="level3-part1"
-                  class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
-                  三级第一
-                </h3>
-                <div class="flex items-center ml-2">
-                  <img src="./leftArrow.svg" width="10" height="10" />
-                  <a
-                    class="text-sm text-[#4EE0C6] ml-2"
-                    href="#"
-                    onClick="javascript:history.go(-1);"
-                    >返回上一页</a
-                  >
-                </div>
-              </div>
-              <div>
-                <ul
-                  class="second-level-item-wrap flex flex-wrap item-wrap-w *:px-2 *:pb-5 *:*:pl-[18px] *:*:py-[10px] *:*:w-full *:*:flex *:*:flex-col *:*:bg-[#f6f6f6] *:*:rounded-lg">
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="module-wrap">
-              <div class="flex items-center mb-5">
-                <h3
-                  id="level3-part2"
-                  class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
-                  三级第二
-                </h3>
-                <div class="flex items-center ml-2">
-                  <img src="./leftArrow.svg" width="10" height="10" />
-                  <a
-                    class="text-sm text-[#4EE0C6] ml-2"
-                    href="#"
-                    onClick="javascript:history.go(-1);"
-                    >返回上一页</a
-                  >
-                </div>
-              </div>
-              <div>
-                <ul
-                  class="second-level-item-wrap flex flex-wrap item-wrap-w *:px-2 *:pb-5 *:*:pl-[18px] *:*:py-[10px] *:*:w-full *:*:flex *:*:flex-col *:*:bg-[#f6f6f6] *:*:rounded-lg">
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.baidu.com">
-                      <div class="item-title-wrap">
-                        <img
-                          src="./logo.png"
-                          width="32"
-                          height="32"
-                          class="rounded-full" />
-                        <h4 class="item-title">Midjourney</h4>
-                      </div>
-                      <span class="item-tip">文章文献代下(免费)</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <!-- 首页 -->
-            <div>
-              <img
-                src="./top-img.png"
-                class="w-full h-[360px] rounded-lg bg-white mb-5 banner-img" />
-              <div class="module-wrap">
-                <div class="flex items-center mb-5">
-                  <h3
-                    id="main-part"
-                    class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
-                    首页 | 可用数据库
-                  </h3>
-                </div>
-                <div>
-                  <ul
-                    class="main-level-item-wrap flex flex-wrap item-wrap-w *:px-2 *:pb-5 *:*:pl-[18px] *:*:py-[10px] *:*:w-full *:*:flex *:*:flex-col *:*:bg-white *:*:rounded-lg">
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.baidu.com">
-                        <h4 class="item-title">四川大学&nbsp; >></h4>
-                        <span class="item-tip"
-                          >使用期限至: 2024-02-30 22:10</span
-                        >
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <!-- 代理申请 -->
-            <div class="module-wrap">
-              <div class="flex items-center mb-5">
-                <h3
-                  id="level3-part1"
-                  class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
-                  代理申请
-                </h3>
-                <div class="flex items-center ml-2">
-                  <img src="./leftArrow.svg" width="10" height="10" />
-                  <a
-                    class="text-sm text-[#4EE0C6] ml-2"
-                    href="#"
-                    onClick="javascript:history.go(-1);"
-                    >返回上一页</a
-                  >
-                </div>
-              </div>
-              <div
-                class="rounded-full bg-[#DEE2E8] flex items-center justify-center px-6 py-1 ml-5 w-fit mr-0 ml-auto mb-10">
-                <img src="./tip.png" width="19" height="22" />
-                <span class="text-black text-xs ml-2.5"
-                  >请填写资料 提交审核</span
-                >
-              </div>
-              <form
-                class="flex flex-col space-y-8 pb-5 form-wrap *:w-full *:flex *:items-center">
-                <div class="form-item">
-                  <label for="account" class="form-label"
-                    ><span>账号</span></label
-                  >
-                  <input
-                    type="text"
-                    name="account"
-                    id="account"
-                    value="18156658546"
-                    disabled
-                    class="form-input form-input-disable" />
-                </div>
-                <div class="form-item">
-                  <label for="account" class="form-label"
-                    ><span>邮箱</span></label
-                  >
-                  <input
-                    type="text"
-                    name="email"
-                    id="email"
-                    disabled
-                    value="12123@qq.com"
-                    class="form-input" />
-                </div>
-                <div class="form-item">
-                  <label for="account" class="form-label form-label-need"
-                    ><span>联系人姓名</span></label
-                  >
-                  <input type="text" name="name" id="name" class="form-input" />
-                </div>
-                <div class="form-item">
-                  <label for="account" class="form-label form-label-need"
-                    ><span>联系电话</span></label
-                  >
-                  <input
-                    type="text"
-                    name="phone"
-                    id="phone"
-                    class="form-input" />
-                </div>
-                <div class="form-item">
-                  <label for="account" class="form-label form-label-need"
-                    ><span>淘宝店铺</span></label
-                  >
-                  <input type="text" name="shop" id="shop" class="form-input" />
-                </div>
-                <div class="form-item">
-                  <label for="account" class="form-label form-label-need"
-                    ><span>代理申请</span></label
-                  >
-                  <input
-                    type="text"
-                    name="apply"
-                    id="apply"
-                    class="form-input" />
-                </div>
-                <button type="submit" class="submit-btn">申请</button>
-              </form>
-            </div>
-          </div>
-        </main>
-        <!-- 右侧浮动定位模块 -->
-        <div class="fixed right-0 top-1/3 right-floating-menu">
-          <div
-            class="tool-wrap flex flex-col items-end *:cursor-pointer *:h-[40px] *:leading-[40px] *:overflow-hidden *:w-[55px] *:transition-all *:duration-[400ms] *:border-dashed *:border *:border-[#b9b9b94a] *:rounded-l-full *:mb-2 *:bg-white *:px-3 *:block *:*:block *:*:text-[rgba(77, 77, 77, 0.8)] *:*:text-[14px] *:*:transition-all *:*:duration-[400ms]">
-            <a href="#top">
-              <span>一级第一</span>
-            </a>
-            <a href="#level1-part2">
-              <span>一级第二</span>
-            </a>
-            <a href="#level1-part3">
-              <span>一级第三</span>
-            </a>
-            <a href="#level2-part1">
-              <span>二级第一</span>
-            </a>
-            <a href="#level2-part2">
-              <span>二级第二</span>
-            </a>
-            <a href="#level3-part1">
-              <span>三级第一</span>
-            </a>
-            <a href="#level3-part2">
-              <span>三级第二</span>
-            </a>
-            <a href="#main-part">
-              <span>首页</span>
-            </a>
-            <a href="#top">
-              <span>返回顶部</span>
-            </a>
           </div>
         </div>
       </div>
+    </header>
+    <main class="flex justify-between w-full h-full">
+      <!-- 左侧菜单 -->
+      <div id="leftMenuWrap" class="left-menu-wrap">
+        <ul
+                class="menu-wrap max-h-full overflow-y-auto w-[150px] mr-4 rounded-xl border border-solid border-[#F1F3F7] bg-white *:relative *:cursor-pointer *:border-b *:border-solid *:border-[#F1F3F7] *:text-base *:text-[#565656] *:w-full *:flex *:items-center *:justify-center *:*:text-center *:*:w-full *:*:inline-block *:*:transition-all *:*:duration-[400ms]">
+          <li>
+            <a href="https://www.baidu.com">续费充值</a>
+          </li>
+          <li>
+            <a>中文数据</a>
+          </li>
+          <li >
+            <a>英文数据</a>
+          </li>
+          <li>
+            <a>Ele数据</a>
+          </li>
+          <li>
+            <a>法律数据</a>
+          </li>
+          <li>
+            <a>法律实务</a>
+          </li>
+          <li>
+            <a>经济金融</a>
+          </li>
+          <li>
+            <a>稀有定制</a>
+          </li>
+          <li>
+            <a>高校图书</a>
+          </li>
+          <li>
+            <a>教育资源</a>
+          </li>
+          <li>
+            <a>多媒体库</a>
+          </li>
+          <li>
+            <a>代理系统</a>
+          </li>
+          <li>
+            <a>使用提示</a>
+          </li>
+          <li>
+            <a>退出</a>
+          </li>
+        </ul>
+      </div>
+      <!-- 右侧内容 -->
+      <div
+              id="rightContentWrap"
+              class="flex flex-col space-y-10 right-content-wrap">
+        <!-- 内容区块 -->
+        <!-- 一级 -->
+        <div class="module-wrap">
+          <div class="flex items-center mb-7 pl-4">
+            <h3
+                    id="level1-part1"
+                    class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
+              一级第一
+            </h3>
+          </div>
+          <div>
+            <ul
+                    class="first-level-item-wrap flex flex-wrap item-wrap-w *:px-3 *:pb-5">
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="module-wrap">
+          <div class="flex items-center mb-7 pl-4">
+            <h3
+                    id="level1-part2"
+                    class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
+              一级第二
+            </h3>
+          </div>
+          <div>
+            <ul
+                    class="first-level-item-wrap flex flex-wrap item-wrap-w *:px-3 *:pb-5">
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="module-wrap">
+          <div class="flex items-center  mb-7 pl-4">
+            <h3
+                    id="level1-part3"
+                    class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
+              一级第三
+            </h3>
+          </div>
+          <div>
+            <ul
+                    class="first-level-item-wrap flex flex-wrap item-wrap-w *:px-3 *:pb-5">
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div
+                          class="item-bg-wrap"
+                          style="background-image: url(./items-bg.png)">
+                    <img src="./logo.png" width="40" height="40" />
+                  </div>
+                  <h4 class="item-title">Omi录屏专家</h4>
+                  <span class="item-tip">屏幕录像工具</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- 二级 -->
+        <div>
+          <img
+                  src="./top-img.png"
+                  class="w-full h-[360px] rounded-lg bg-white border border-solid border-[#EDECEC] mb-5 banner-img" />
+          <div class="module-wrap">
+            <div class="flex items-center mb-7 pl-4">
+              <h3
+                      id="level2-part1"
+                      class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
+                二级第一
+              </h3>
+              <div class="flex items-center ml-2">
+                <img src="./leftArrow.svg" width="10" height="10" />
+                <a
+                        class="text-sm text-[#4EE0C6] ml-2"
+                        href="#"
+                        onClick="javascript:history.go(-1);"
+                >返回上一页</a
+                >
+              </div>
+            </div>
+            <div>
+              <ul
+                      class="second-level-item-wrap flex flex-wrap item-wrap-w *:px-3 *:pb-5 *:*:pl-[18px] *:*:py-[10px] *:*:w-full *:*:flex *:*:flex-col *:*:bg-[#f6f6f6] *:*:rounded-lg">
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div>
+          <img
+                  src="./top-img.png"
+                  class="w-full h-[360px] rounded-lg bg-white border border-solid border-[#EDECEC] mb-5 banner-img" />
+          <div class="module-wrap">
+            <div class="flex items-center mb-7 pl-4">
+              <h3
+                      id="level2-part2"
+                      class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
+                二级第二
+              </h3>
+              <div class="flex items-center ml-2">
+                <img src="./leftArrow.svg" width="10" height="10" />
+                <a
+                        class="text-sm text-[#4EE0C6] ml-2"
+                        href="#"
+                        onClick="javascript:history.go(-1);"
+                >返回上一页</a
+                >
+              </div>
+            </div>
+            <div>
+              <ul
+                      class="second-level-item-wrap flex flex-wrap item-wrap-w *:px-3 *:pb-5 *:*:pl-[18px] *:*:py-[10px] *:*:w-full *:*:flex *:*:flex-col *:*:bg-[#f6f6f6] *:*:rounded-lg">
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <div class="item-title-wrap">
+                      <img
+                              src="./logo.png"
+                              width="32"
+                              height="32"
+                              class="rounded-full" />
+                      <h4 class="item-title">Midjourney</h4>
+                    </div>
+                    <span class="item-tip">文章文献代下(免费)</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- 三级 -->
+        <div class="module-wrap">
+          <div class="flex items-center mb-7 pl-4">
+            <h3
+                    id="level3-part1"
+                    class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
+              三级第一
+            </h3>
+            <div class="flex items-center ml-2">
+              <img src="./leftArrow.svg" width="10" height="10" />
+              <a
+                      class="text-sm text-[#4EE0C6] ml-2"
+                      href="#"
+                      onClick="javascript:history.go(-1);"
+              >返回上一页</a
+              >
+            </div>
+          </div>
+          <div>
+            <ul
+                    class="second-level-item-wrap flex flex-wrap item-wrap-w *:px-3 *:pb-5 *:*:pl-[18px] *:*:py-[10px] *:*:w-full *:*:flex *:*:flex-col *:*:bg-[#f6f6f6] *:*:rounded-lg">
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="module-wrap">
+          <div class="flex items-center mb-7 pl-4">
+            <h3
+                    id="level3-part2"
+                    class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
+              三级第二
+            </h3>
+            <div class="flex items-center ml-2">
+              <img src="./leftArrow.svg" width="10" height="10" />
+              <a
+                      class="text-sm text-[#4EE0C6] ml-2"
+                      href="#"
+                      onClick="javascript:history.go(-1);"
+              >返回上一页</a
+              >
+            </div>
+          </div>
+          <div>
+            <ul
+                    class="second-level-item-wrap flex flex-wrap item-wrap-w *:px-3 *:pb-5 *:*:pl-[18px] *:*:py-[10px] *:*:w-full *:*:flex *:*:flex-col *:*:bg-[#f6f6f6] *:*:rounded-lg">
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.baidu.com">
+                  <div class="item-title-wrap">
+                    <img
+                            src="./logo.png"
+                            width="32"
+                            height="32"
+                            class="rounded-full" />
+                    <h4 class="item-title">Midjourney</h4>
+                  </div>
+                  <span class="item-tip">文章文献代下(免费)</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- 首页 -->
+        <div>
+          <img
+                  src="./top-img.png"
+                  class="w-full h-[360px] rounded-lg bg-white mb-5 banner-img" />
+          <div class="module-wrap">
+            <div class="flex items-center mb-7 pl-4">
+              <h3
+                      id="main-part"
+                      class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
+                首页 | 可用数据库
+              </h3>
+            </div>
+            <div>
+              <ul
+                      class="second-level-item-wrap main-level-item-wrap flex flex-wrap item-wrap-w *:px-3 *:pb-5 *:*:pl-[18px] *:*:py-[10px] *:*:w-full *:*:flex *:*:flex-col *:*:bg-white *:*:rounded-lg">
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.baidu.com">
+                    <h4 class="item-title">四川大学&nbsp; >></h4>
+                    <span class="item-tip"
+                    >使用期限至: 2024-02-30 22:10</span
+                    >
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- 代理申请 -->
+        <div class="module-wrap">
+          <div class="flex items-center mb-7 pl-4">
+            <h3
+                    id="level3-part1"
+                    class="text-sm pl-4 text-black font-bold relative before:absolute before:content-[''] before:w-[4px] before:top-0 before:bottom-0 before:left-0 before:bg-[#2CFFDA]">
+              代理申请
+            </h3>
+            <div class="flex items-center ml-2">
+              <img src="./leftArrow.svg" width="10" height="10" />
+              <a
+                      class="text-sm text-[#4EE0C6] ml-2"
+                      href="#"
+                      onClick="javascript:history.go(-1);"
+              >返回上一页</a
+              >
+            </div>
+          </div>
+          <div
+                  class="rounded-full bg-[#DEE2E8] flex items-center justify-center px-6 py-1 ml-5 w-fit mr-0 ml-auto mb-10">
+            <img src="./tip.png" width="19" height="22" />
+            <span class="text-black text-xs ml-2.5"
+            >请填写资料 提交审核</span
+            >
+          </div>
+          <form
+                  class="flex flex-col space-y-8 pb-5 form-wrap *:w-full *:flex *:items-center">
+            <div class="form-item">
+              <label for="account" class="form-label"
+              ><span>账号</span></label
+              >
+              <input
+                      type="text"
+                      name="account"
+                      id="account"
+                      value="18156658546"
+                      disabled
+                      class="form-input form-input-disable" />
+            </div>
+            <div class="form-item">
+              <label for="account" class="form-label"
+              ><span>邮箱</span></label
+              >
+              <input
+                      type="text"
+                      name="email"
+                      id="email"
+                      disabled
+                      value="12123@qq.com"
+                      class="form-input" />
+            </div>
+            <div class="form-item">
+              <label for="account" class="form-label form-label-need"
+              ><span>联系人姓名</span></label
+              >
+              <input type="text" name="name" id="name" class="form-input" />
+            </div>
+            <div class="form-item">
+              <label for="account" class="form-label form-label-need"
+              ><span>联系电话</span></label
+              >
+              <input
+                      type="text"
+                      name="phone"
+                      id="phone"
+                      class="form-input" />
+            </div>
+            <div class="form-item">
+              <label for="account" class="form-label form-label-need"
+              ><span>淘宝店铺</span></label
+              >
+              <input type="text" name="shop" id="shop" class="form-input" />
+            </div>
+            <div class="form-item">
+              <label for="account" class="form-label form-label-need"
+              ><span>代理申请</span></label
+              >
+              <input
+                      type="text"
+                      name="apply"
+                      id="apply"
+                      class="form-input" />
+            </div>
+            <button type="submit" class="submit-btn">申请</button>
+          </form>
+        </div>
+      </div>
+    </main>
+    <!-- 右侧浮动定位模块 -->
+    <div class="fixed right-0 top-40 right-floating-menu">
+      <div
+              class="tool-wrap flex flex-col items-end *:cursor-pointer *:h-[40px] *:leading-[40px] *:overflow-hidden *:w-[55px] *:transition-all *:duration-[400ms] *:border-dashed *:border *:border-[#b9b9b94a] *:rounded-l-full *:mb-2 *:bg-white *:px-3 *:block *:*:block *:*:text-[rgba(77, 77, 77, 0.8)] *:*:text-[14px] *:*:transition-all *:*:duration-[400ms]">
+        <a href="#top">
+          <span>一级第一</span>
+        </a>
+        <a href="#level1-part2">
+          <span>一级第二</span>
+        </a>
+        <a href="#level1-part3">
+          <span>一级第三</span>
+        </a>
+        <a href="#level2-part1">
+          <span>二级第一</span>
+        </a>
+        <a href="#level2-part2">
+          <span>二级第二</span>
+        </a>
+        <a href="#level3-part1">
+          <span>三级第一</span>
+        </a>
+        <a href="#level3-part2">
+          <span>三级第二</span>
+        </a>
+        <a href="#main-part">
+          <span>首页</span>
+        </a>
+        <a href="#top">
+          <span>返回顶部</span>
+        </a>
+      </div>
     </div>
-    <script>
-      const mobileHeader = document.querySelector("#MobileHeader");
-      const toggleMenu = () => {
-        if (
-          Array.prototype.includes.call(mobileHeader.classList, "full-height")
-        ) {
-          mobileHeader.classList.remove("full-height");
-        } else {
-          mobileHeader.classList.add("full-height");
-        }
-      };
-      window.onload = function () {
-        const rightContentWrap = document.querySelector("#rightContentWrap");
-        const leftMenuWrap = document.querySelector("#leftMenuWrap");
-        const changeLeftMenuWrapPosition = () => {
-          const left = rightContentWrap.offsetLeft + "px";
-          leftMenuWrap.style.left = left;
-        };
-        changeLeftMenuWrapPosition();
-        window.addEventListener("resize", changeLeftMenuWrapPosition);
-      };
-    </script>
-  </body>
+  </div>
+</div>
+<script>
+  const mobileHeader = document.querySelector("#MobileHeader");
+  const toggleMenu = () => {
+    if (
+            Array.prototype.includes.call(mobileHeader.classList, "full-height")
+    ) {
+      mobileHeader.classList.remove("full-height");
+    } else {
+      mobileHeader.classList.add("full-height");
+    }
+  };
+  window.onload = function () {
+    const rightContentWrap = document.querySelector("#rightContentWrap");
+    const leftMenuWrap = document.querySelector("#leftMenuWrap");
+    const changeLeftMenuWrapPosition = () => {
+      const left = rightContentWrap.offsetLeft + "px";
+      leftMenuWrap.style.left = left;
+      leftMenuWrap.style.display = 'block'
+    };
+    changeLeftMenuWrapPosition();
+    window.addEventListener("resize", changeLeftMenuWrapPosition);
+  };
+</script>
+</body>
 </html>
