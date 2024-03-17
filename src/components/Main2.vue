@@ -654,9 +654,6 @@ top: 0;
   justify-content: space-between;
 }
 
-.left-part {
-}
-
 .center-part {
   padding: 0 3rem;
   position: relative;
