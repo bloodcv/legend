@@ -96,5 +96,11 @@ export default {
                 memory:'内存'
             }
         }
+    },
+    main2: {
+        rightBottomWarn: '告警',
+        rightBottomCommon: '一般',
+        rightBottomSerious: '严重',
+        rightBottomDisaster: '灾难',
     }
 }

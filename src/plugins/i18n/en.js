@@ -96,5 +96,11 @@ export default {
                 memory: 'Memory'
             }
         }
+    },
+    main2: {
+        rightBottomWarn: 'warn',
+        rightBottomCommon: 'common',
+        rightBottomSerious: 'serious',
+        rightBottomDisaster: 'disaster',
     }
 }

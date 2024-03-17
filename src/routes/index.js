@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Main from "@/components/Main.vue";
-import SecondMain from "@/components/SecondMain/Main.vue";
+import Main2 from "@/components/Main2.vue";
 import Protected from "@/components/Protected.vue";
 import {useSignStore} from "@/stores/signStore.js";
 
@@ -10,16 +10,16 @@ export const router = createRouter({
     routes: [
         {
             name: 'main',
-            path: '/Main',
-            component: Main,
+            path: '/',
+            component: Main2,
             beforeEnter: checkToken
         },
-        {
+        /* {
             name: 'main',
             path: '/',
             component: SecondMain,
             // beforeEnter: checkToken
-        },
+        }, */
         {
             name: 'protected',
             path: '/protected',
