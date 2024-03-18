@@ -3,13 +3,7 @@
 import axios from "axios";
 import dayjs from "dayjs";
 import * as echarts from "echarts";
-import {
-  nextTick,
-  onMounted,
-  onUnmounted,
-  reactive,
-  ref,
-} from "vue";
+import { nextTick, onMounted, onUnmounted, reactive, ref } from "vue";
 import { KJUR } from "jsrsasign";
 import SvgIcon from "@/components/SvgIcon.vue";
 import UtilArea2 from "@/components/sub_area/UtilArea2.vue";
@@ -85,7 +79,7 @@ const deviceAndAlarmUpdate = ref();
 const curHostIdx = ref(-1);
 const nextHostIdx = ref(0);
 const hostUpdate = ref();
-const originHostList = ref([])
+const originHostList = ref([]);
 const hostList = ref([]);
 const hostMap = ref(new Map());
 const chartFirstRef = ref();
@@ -113,7 +107,7 @@ const resolveNumber = (day = 0) => {
  * set host map which type is Map<string, hostIdx>
  */
 const setHostInfo = list => {
-  originHostList.value = [...JSON.parse(JSON.stringify(list))]
+  originHostList.value = [...JSON.parse(JSON.stringify(list))];
   hostList.value = [...list];
   const map = new Map();
   list.map((_, idx) => map.set(_.hostid, idx));
@@ -191,8 +185,8 @@ const setHostDetail = (detail, idx) => {
     legend: {
       data: ["下行", "上行"],
       textStyle: {
-        color: '#fff'
-      }
+        color: "#fff",
+      },
     },
     tooltip: {
       trigger: "axis",
@@ -354,20 +348,23 @@ const initChart = () => {
   });
 };
 
-const updateMenuData = (params) => {
-  Object.keys(params).map(_ => menuNameData[_] = params[_])
-}
+const updateMenuData = params => {
+  Object.keys(params).map(_ => (menuNameData[_] = params[_]));
+};
 
-const changeHostList = (param) => {
+const changeHostList = param => {
   hostUpdate.value = null;
-  const newHostList = originHostList.value.filter((_ => {
-    return param.includes(_.hostid)
-  }))
-  hostList.value = [...newHostList]
-  curHostIdx.value = -1
-  nextHostIdx.value = 0
-  beginHostUpdate()
-}
+  const newHostList = originHostList.value.filter(_ => {
+    return param.includes(_.hostid);
+  });
+  hostList.value = [...newHostList];
+  const map = new Map();
+  newHostList.map((_, idx) => map.set(_.hostid, idx));
+  hostMap.value = map;
+  curHostIdx.value = -1;
+  nextHostIdx.value = 0;
+  beginHostUpdate();
+};
 
 onMounted(async () => {
   const auth = window.localStorage.getItem("code");
@@ -403,9 +400,10 @@ window.addEventListener("beforeunload", cleanAction);
 <template>
   <div class="main-wrap">
     <div class="header">
-      <span>{{ menuNameData.name }}</span>
+      <span class="header-title">{{ menuNameData.name }}</span>
       <div class="tool-wrap">
-        <UtilArea2 :menuData="menuNameData" :originHostList="originHostList" :hostList="hostList" @updateMenuData="updateMenuData" @changeHostList="changeHostList" />
+        <UtilArea2 :menuData="menuNameData" :originHostList="originHostList" :hostList="hostList"
+          @updateMenuData="updateMenuData" @changeHostList="changeHostList" />
       </div>
     </div>
     <a-row class="content-wrap">
@@ -414,36 +412,28 @@ window.addEventListener("beforeunload", cleanAction);
           <h3 class="info-text">({{ menuNameData.l_title }})</h3>
           <div class="info-item">
             <SvgIcon name="switch-menu" class="icon-tag" />
-            <span class="info-text"
-              >{{ menuNameData.l_1 }} [{{
-                resolveNumber(deviceData.total)
-              }}]台</span
-            >
+            <span class="info-text">{{ menuNameData.l_1 }} [{{
+        resolveNumber(deviceData.total)
+      }}]台</span>
           </div>
           <div class="info-item">
             <SvgIcon name="server-menu" class="icon-tag" />
-            <span class="info-text"
-              >{{ menuNameData.l_2 }} [{{
-                resolveNumber(deviceData.network)
-              }}]台</span
-            >
+            <span class="info-text">{{ menuNameData.l_2 }} [{{
+        resolveNumber(deviceData.network)
+      }}]台</span>
           </div>
           <div class="info-item">
             <SvgIcon name="vm-menu" class="icon-tag" />
-            <span class="info-text"
-              >{{ menuNameData.l_3 }} [{{
-                resolveNumber(deviceData.system)
-              }}]台</span
-            >
+            <span class="info-text">{{ menuNameData.l_3 }} [{{
+        resolveNumber(deviceData.system)
+      }}]台</span>
           </div>
         </div>
         <div class="info-wrap">
           <h3 class="info-text">(时间栏)</h3>
           <div class="info-item">
             <SvgIcon name="runday" class="icon-tag" />
-            <span class="info-text"
-              >系统运行 {{ resolveNumber(runday) }} 天</span
-            >
+            <span class="info-text">系统运行 {{ resolveNumber(runday) }} 天</span>
           </div>
           <div class="info-item">
             <SvgIcon name="time" class="icon-tag" />
@@ -455,18 +445,16 @@ window.addEventListener("beforeunload", cleanAction);
           </div>
           <div class="info-item">
             <SvgIcon name="stop" class="icon-tag" />
-            <span class="info-text"
-              >服务期限
-              <span class="red-text">&nbsp;{{ serverDeadLine }}</span></span
-            >
+            <span class="info-text">服务期限
+              <span class="red-text">&nbsp;{{ serverDeadLine }}</span></span>
           </div>
         </div>
       </a-col>
       <a-col :span="12" class="part center-part">
         <div class="host-info-head info-text" v-if="curHostIdx > -1">
           当前设备:&nbsp;&nbsp;{{
-            hostList[curHostIdx].type
-          }}类设备&nbsp;&nbsp;{{ hostList[curHostIdx].name }}
+        hostList[curHostIdx].type
+      }}类设备&nbsp;&nbsp;{{ hostList[curHostIdx].name }}
         </div>
         <div class="chart-wrap">
           <div class="chart-item chart-first">
@@ -488,86 +476,74 @@ window.addEventListener("beforeunload", cleanAction);
           <h3 class="info-text">({{ menuNameData.r_title }})</h3>
           <div class="info-item">
             <SvgIcon name="switch-menu" class="icon-tag" />
-            <span class="info-text"
-              >{{ menuNameData.r_1 }} [<span class="red-text">{{
-                resolveNumber(alarmData.total)
-              }}</span
-              >]台</span
-            >
+            <span class="info-text">{{ menuNameData.r_1 }} [<span class="red-text">{{
+        resolveNumber(alarmData.total)
+      }}</span>]台</span>
           </div>
           <div class="info-item">
             <SvgIcon name="server-menu" class="icon-tag" />
-            <span class="info-text"
-              >{{ menuNameData.r_2 }} [<span class="red-text">{{
-                resolveNumber(alarmData.network)
-              }}</span
-              >]台</span
-            >
+            <span class="info-text">{{ menuNameData.r_2 }} [<span class="red-text">{{
+        resolveNumber(alarmData.network)
+      }}</span>]台</span>
           </div>
           <div class="info-item">
             <SvgIcon name="vm-menu" class="icon-tag" />
-            <span class="info-text"
-              >{{ menuNameData.r_3 }} [<span class="red-text">{{
-                resolveNumber(alarmData.system)
-              }}</span
-              >]台</span
-            >
+            <span class="info-text">{{ menuNameData.r_3 }} [<span class="red-text">{{
+        resolveNumber(alarmData.system)
+      }}</span>]台</span>
           </div>
         </div>
         <div class="info-wrap">
           <h3 class="info-text">(报警类型栏)</h3>
           <div class="info-item">
             <span class="info-text">
-              <span class="warn-type-serial">①</span>{{$t('main2.rightBottomWarn')}} [
+              <span class="warn-type-serial">①</span>{{ $t("main2.rightBottomWarn") }} [
               <span class="red-text">{{
-                resolveNumber(alarmTypeData.warn)
-              }}</span
-              >]次</span
-            >
+        resolveNumber(alarmTypeData.warn)
+      }}</span>]次</span>
           </div>
           <div class="info-item">
-            <span class="info-text"
-              ><span class="warn-type-serial">②</span>{{$t('main2.rightBottomCommon')}} [<span
-                class="red-text"
-                >{{ resolveNumber(alarmTypeData.commonly) }}</span
-              >]次</span
-            >
+            <span class="info-text"><span class="warn-type-serial">②</span>{{ $t("main2.rightBottomCommon") }} [<span
+                class="red-text">{{
+        resolveNumber(alarmTypeData.commonly)
+      }}</span>]次</span>
           </div>
           <div class="info-item">
-            <span class="info-text"
-              ><span class="warn-type-serial">③</span>{{$t('main2.rightBottomSerious')}} [<span
-                class="red-text"
-                >{{ resolveNumber(alarmTypeData.serious) }}</span
-              >]次</span
-            >
+            <span class="info-text"><span class="warn-type-serial">③</span>{{ $t("main2.rightBottomSerious") }} [<span
+                class="red-text">{{
+        resolveNumber(alarmTypeData.serious)
+      }}</span>]次</span>
           </div>
           <div class="info-item">
-            <span class="info-text"
-              ><span class="warn-type-serial">④</span>{{$t('main2.rightBottomDisaster')}} [<span
-                class="red-text"
-                >{{ resolveNumber(alarmTypeData.disaster) }}</span
-              >]次</span
-            >
+            <span class="info-text"><span class="warn-type-serial">④</span>{{ $t("main2.rightBottomDisaster") }} [<span
+                class="red-text">{{
+        resolveNumber(alarmTypeData.disaster)
+      }}</span>]次</span>
           </div>
         </div>
       </a-col>
     </a-row>
     <div class="footer" v-if="enterpriseInfo.status">
-      <span>Powered By</span
-      ><a :href="enterpriseInfo.url">{{ enterpriseInfo.name }}</a>
+      <span>Powered By</span><a :href="enterpriseInfo.url">{{ enterpriseInfo.name }}</a>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .header {
-    position: relative;
-    .tool-wrap {
-position: absolute;
-right: 0;
-top: 0;
-    }
+  position: relative;
+
+  .tool-wrap {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .header-title {
+    color: #fff;
+  }
 }
+
 .main-wrap {
   width: 100%;
   height: 100%;
@@ -596,6 +572,7 @@ top: 0;
   font-size: 2rem;
   display: flex;
   align-items: center;
+  color: #fff;
 }
 
 .warn-type-serial {
@@ -690,6 +667,7 @@ top: 0;
     .chart-item {
       flex: 1;
       padding-top: 1rem;
+
       .chart-content {
         width: 100%;
         height: 100%;
@@ -699,42 +677,42 @@ top: 0;
 }
 
 .util-area {
-    height: 7.44rem;
-    width: 100%;
-    padding-top: 1rem;
+  height: 7.44rem;
+  width: 100%;
+  padding-top: 1rem;
 
-    .util-config {
-        float: right;
-        margin-right: 1.5rem;
-        cursor: pointer;
-        .util-config-svg {
-            fill: #A3CAF3;
-            transition: ease .3s;
-        }
+  .util-config {
+    float: right;
+    margin-right: 1.5rem;
+    cursor: pointer;
 
-        &:hover {
-            .util-config-svg {
-                fill: #3e74ea;
-            }
-        }
-
-
+    .util-config-svg {
+      fill: #a3caf3;
+      transition: ease 0.3s;
     }
 
-    .util-translate {
-        float: right;
-        margin-right: 1.7rem;
-        cursor: pointer;
-        .util-config-svg {
-            fill: #A3CAF3;
-            transition: ease .3s;
-        }
-
-        &:hover {
-            .util-config-svg {
-                fill: #3e74ea;
-            }
-        }
+    &:hover {
+      .util-config-svg {
+        fill: #3e74ea;
+      }
     }
+  }
+
+  .util-translate {
+    float: right;
+    margin-right: 1.7rem;
+    cursor: pointer;
+
+    .util-config-svg {
+      fill: #a3caf3;
+      transition: ease 0.3s;
+    }
+
+    &:hover {
+      .util-config-svg {
+        fill: #3e74ea;
+      }
+    }
+  }
 }
 </style>
