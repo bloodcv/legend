@@ -602,7 +602,7 @@ window.addEventListener("beforeunload", cleanAction);
 
 <style scoped lang="scss">
 .main-wrap {
-  background: url("../assets/main-bg.png") no-repeat center/100%;
+  background: url("../assets/main-bg.png") no-repeat center/100% 100%;
 }
 .header {
   display: flex;
@@ -621,14 +621,15 @@ window.addEventListener("beforeunload", cleanAction);
     position: relative;
     width: 30%;
     height: 100%;
-    background: url("../assets/header-aside-bg.png") no-repeat center/100%;
+    top: 5px;
+    background: url("../assets/header-aside-bg.png") no-repeat center/100% 100%;
     &::before {
       position: absolute;
       content: '';
       width: 3rem;
       height: 0.5rem;
       top: 0.5rem;
-      background: url("../assets/header-aside-dot.png") no-repeat center/100%;
+      background: url("../assets/header-aside-dot.png") no-repeat center/100% 100%;
     }
   }
   .left-bg {
