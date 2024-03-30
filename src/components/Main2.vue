@@ -601,6 +601,9 @@ window.addEventListener("beforeunload", cleanAction);
 </template>
 
 <style scoped lang="scss">
+.main-wrap {
+  background: url("../assets/main-bg.png") no-repeat center/100%;
+}
 .header {
   display: flex;
   align-items: center;
