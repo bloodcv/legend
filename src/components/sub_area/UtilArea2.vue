@@ -125,11 +125,11 @@ const changeHostListInChild = () => {
 <template>
   <div class="util-area">
     <div class="util-config" @click="openConfigModal">
-      <SvgIcon name="util-area-config" class="util-config-svg" />
+        <img src="../../assets/setting.png" class="tool-icon" />
     </div>
     <a-dropdown placement="bottomRight">
       <div class="util-translate">
-        <SvgIcon name="util-area-translate" class="util-config-svg" />
+        <img src="../../assets/translate.png" class="tool-icon" />
       </div>
       <template #overlay>
         <a-menu>
@@ -187,6 +187,10 @@ const changeHostListInChild = () => {
 </template>
 
 <style lang="scss" scoped>
+  .tool-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
 .util-area {
   height: 7.44rem;
   width: 100%;
@@ -198,15 +202,15 @@ const changeHostListInChild = () => {
     cursor: pointer;
 
     .util-config-svg {
-      fill: #a3caf3;
+      fill: #fff;
       transition: ease 0.3s;
     }
 
-    &:hover {
+    /* &:hover {
       .util-config-svg {
         fill: #3e74ea;
       }
-    }
+    } */
   }
 
   .util-translate {
@@ -215,15 +219,15 @@ const changeHostListInChild = () => {
     cursor: pointer;
 
     .util-config-svg {
-      fill: #a3caf3;
+      fill: #fff;
       transition: ease 0.3s;
     }
 
-    &:hover {
+    /* &:hover {
       .util-config-svg {
         fill: #3e74ea;
       }
-    }
+    } */
   }
 }
 
