@@ -76,6 +76,7 @@ const enterpriseInfo = reactive({
   url: "",
 });
 const runday = ref("");
+const expireDateStatus = ref()
 const currentTime = ref(dayjs().format("HH:mm:ss"));
 const currentTimeUpdate = ref();
 const currentDate = ref(dayjs().format("YYYY-MM-DD"));
@@ -138,8 +139,7 @@ const setHostDetail = (detail, idx) => {
     title: {
       text: firstData.name,
       textStyle,
-      textAlign: "center",
-      left: "50%",
+      textAlign: "left",
     },
     tooltip: {
       trigger: "axis",
@@ -169,8 +169,7 @@ const setHostDetail = (detail, idx) => {
     title: {
       text: secondData.name,
       textStyle,
-      textAlign: "center",
-      left: "50%",
+      textAlign: "left",
     },
     tooltip: {
       trigger: "axis",
@@ -200,8 +199,7 @@ const setHostDetail = (detail, idx) => {
     title: {
       text: thirdData.name,
       textStyle,
-      textAlign: "center",
-      left: "33%",
+      textAlign: "left",
     },
     legend: {
       data: ["下行", "上行"],
@@ -243,8 +241,7 @@ const setHostDetail = (detail, idx) => {
     title: {
       text: fourthData.name,
       textStyle,
-      textAlign: "center",
-      left: "50%",
+      textAlign: "left",
     },
     tooltip: {
       trigger: "axis",
@@ -304,6 +301,7 @@ const getEnvInfo = async (init = false) => {
         _ => (enterpriseInfo[_] = envInfoRes.enterpriseInfo[_])
       );
       runday.value = envInfoRes.runday || 0;
+      expireDateStatus.value = envInfoRes.expireDateStatus || 0;
       setHostInfo(envInfoRes.list);
     }
   } catch (error) {
@@ -491,7 +489,7 @@ window.addEventListener("beforeunload", cleanAction);
             <!-- <SvgIcon name="date" class="icon-tag" /> -->
             <span class="info-text">当前日期 {{ currentDate }}</span>
           </div>
-          <div class="info-item">
+          <div class="info-item" v-if="expireDateStatus">
             <!-- <SvgIcon name="stop" class="icon-tag" /> -->
             <span class="info-text"
               >服务期限 <span>&nbsp;{{ serverDeadLine }}</span></span
@@ -739,6 +737,13 @@ window.addEventListener("beforeunload", cleanAction);
 .footer {
   padding: 1rem 0;
   text-align: center;
+  span {
+    display: inline-block;
+    margin-right: 1rem;
+  }
+  a {
+    color: #fff;
+  }
 }
 
 .content-wrap {
