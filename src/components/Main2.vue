@@ -22,7 +22,7 @@ const yAxisOption = {
   splitLine: {
     show: true,
     lineStyle: {
-      color: "rgba(255, 255, 255, 0.1)",
+      color: "rgba(255, 255, 255, 0.5)",
     },
   },
   axisLine: {
@@ -35,9 +35,10 @@ const yAxisOption = {
 const textStyle = {
   color: "#fff",
 };
-const EnvInfoApi = "http://101.132.244.36/api/getHostNumber";
-const hostInfoApi = "http://101.132.244.36/api/getHostInfo"; // hostid 10084
-const menuNameApi = "http://101.132.244.36/api/getMenuList";
+import { ZABBIX_API } from "@/constants.js";
+const EnvInfoApi = ZABBIX_API + "/getHostNumber";
+const hostInfoApi = ZABBIX_API + "/getHostInfo"; // hostid 10084
+const menuNameApi = ZABBIX_API + "/getMenuList";
 // const updateMenuApi = "http://101.132.244.36/api/saveMenu";
 const defaultTimeGetHostInfo = 30000; // 30s
 const defaultTimeGetDeviceAndAlarm = 60000; // 1m
@@ -76,7 +77,7 @@ const enterpriseInfo = reactive({
   url: "",
 });
 const runday = ref("");
-const expireDateStatus = ref()
+const expireDateStatus = ref("");
 const currentTime = ref(dayjs().format("HH:mm:ss"));
 const currentTimeUpdate = ref();
 const currentDate = ref(dayjs().format("YYYY-MM-DD"));
@@ -89,6 +90,12 @@ const originHostList = ref([]);
 const hostList = ref([]);
 const hostMap = ref(new Map());
 const chartFirstRef = ref();
+const chartDataTemp = reactive({
+  firstData: {},
+  secondData: {},
+  thirdData: {},
+  fourthData: {},
+});
 let chartFirstInstance = null;
 const chartSecondRef = ref();
 let chartSecondInstance = null;
@@ -135,9 +142,13 @@ const setHostDetail = (detail, idx) => {
     bandwidth: thirdData,
     disk: fourthData,
   } = detail.chart;
+  chartDataTemp.firstData = firstData;
+  chartDataTemp.secondData = secondData;
+  chartDataTemp.thirdData = thirdData;
+  chartDataTemp.fourthData = fourthData;
   chartFirstInstance.setOption({
     title: {
-      text: firstData.name,
+      text: localStorage.getItem('locale') === 'en' ? firstData.enName : firstData.name,
       textStyle,
       textAlign: "left",
     },
@@ -162,12 +173,13 @@ const setHostDetail = (detail, idx) => {
         lineStyle: {
           color: "#F2D66E",
         },
+        showSymbol: false,
       },
     ],
   });
   chartSecondInstance.setOption({
     title: {
-      text: secondData.name,
+      text: localStorage.getItem('locale') === 'en' ? secondData.enName : secondData.name,
       textStyle,
       textAlign: "left",
     },
@@ -192,17 +204,18 @@ const setHostDetail = (detail, idx) => {
         lineStyle: {
           color: "#F2D66E",
         },
+        showSymbol: false,
       },
     ],
   });
   chartThirdInstance.setOption({
     title: {
-      text: thirdData.name,
+      text: localStorage.getItem('locale') === 'en' ? thirdData.enName : thirdData.name,
       textStyle,
       textAlign: "left",
     },
     legend: {
-      data: ["下行", "上行"],
+      data: ["down", "up"],
       textStyle: {
         color: "#fff",
       },
@@ -223,23 +236,25 @@ const setHostDetail = (detail, idx) => {
     yAxis: yAxisOption,
     series: [
       {
-        name: "下行",
+        name: "down",
         data: [...thirdData.data[0]],
         type: "line",
         lineStyle: {
           color: "#F2D66E",
         },
+        showSymbol: false,
       },
       {
-        name: "上行",
+        name: "up",
         data: [...thirdData.data[1]],
         type: "line",
+        showSymbol: false,
       },
     ],
   });
   chartFourthInstance.setOption({
     title: {
-      text: fourthData.name,
+      text: localStorage.getItem('locale') === 'en' ? fourthData.enName : fourthData.name,
       textStyle,
       textAlign: "left",
     },
@@ -263,6 +278,7 @@ const setHostDetail = (detail, idx) => {
         lineStyle: {
           color: "#F2D66E",
         },
+        showSymbol: false,
       },
     ],
   });
@@ -301,7 +317,7 @@ const getEnvInfo = async (init = false) => {
         _ => (enterpriseInfo[_] = envInfoRes.enterpriseInfo[_])
       );
       runday.value = envInfoRes.runday || 0;
-      expireDateStatus.value = envInfoRes.expireDateStatus || 0;
+      expireDateStatus.value = envInfoRes.expireDateStatus;
       setHostInfo(envInfoRes.list);
     }
   } catch (error) {
@@ -401,6 +417,31 @@ const changeHostList = param => {
   beginHostUpdate();
 };
 
+const languageChange = e => {
+  if (e.key === "locale") {
+    chartFirstInstance.setOption({
+      title: {
+        text: e.newValue === 'en' ? chartDataTemp.firstData.enName : chartDataTemp.firstData.name,
+      }
+    })
+    chartSecondInstance.setOption({
+      title: {
+        text: e.newValue === 'en' ? chartDataTemp.secondData.enName : chartDataTemp.secondData.name,
+      }
+    })
+    chartThirdInstance.setOption({
+      title: {
+        text: e.newValue === 'en' ? chartDataTemp.thirdData.enName : chartDataTemp.thirdData.name,
+      }
+    })
+    chartFourthInstance.setOption({
+      title: {
+        text: e.newValue === 'en' ? chartDataTemp.fourthData.enName : chartDataTemp.fourthData.name,
+      }
+    })
+  }
+};
+
 onMounted(async () => {
   const auth = window.localStorage.getItem("code");
   // init update currentTime bg one second
@@ -417,6 +458,28 @@ onMounted(async () => {
     beginHostUpdate();
   }
   initChart();
+
+  (function () {
+    //定义一个变量让setItem函数的值指向它
+    let originalSetItem = localStorage.setItem;
+    //重写setItem函数
+    localStorage.setItem = function (key, newValue) {
+      //创建setItemEvent事件
+      let event = new Event("setItemEvent");
+      event.key = key;
+      event.newValue = newValue;
+      //提交setItemEvent事件
+      window.dispatchEvent(event);
+      //执行原setItem函数
+      originalSetItem.apply(this, arguments);
+    };
+  })();
+
+  // window.addEventListener("storage", languageChange);
+
+  //添加setItemEvent监听事件
+  window.addEventListener("setItemEvent", languageChange)
+
 });
 
 const cleanAction = () => {
@@ -426,6 +489,7 @@ const cleanAction = () => {
   hostUpdate.value = null;
   window.removeEventListener("resize", handleResize);
   window.removeEventListener("beforeunload", cleanAction);
+  window.removeEventListener("setItemEvent", languageChange);
 };
 
 onUnmounted(() => cleanAction());
@@ -436,7 +500,7 @@ window.addEventListener("beforeunload", cleanAction);
   <div class="main-wrap">
     <div class="header">
       <div class="left-bg"></div>
-      <span class="header-title">{{ menuNameData.name }}</span>
+      <span class="header-title">{{ menuNameData.name }}哈哈哈哈</span>
       <div class="right-bg"></div>
       <div class="tool-wrap">
         <UtilArea2
@@ -455,53 +519,59 @@ window.addEventListener("beforeunload", cleanAction);
             <!-- <SvgIcon name="switch-menu" class="icon-tag" /> -->
             <span class="info-text"
               >{{ menuNameData.l_1 }} [{{ resolveNumber(deviceData.total) }}]
-              台</span
+              {{ $t("main2.tai") }}</span
             >
           </div>
           <div class="info-item">
             <!-- <SvgIcon name="server-menu" class="icon-tag" /> -->
             <span class="info-text"
               >{{ menuNameData.l_2 }} [{{ resolveNumber(deviceData.network) }}]
-              台</span
+              {{ $t("main2.tai") }}</span
             >
           </div>
           <div class="info-item">
             <!-- <SvgIcon name="vm-menu" class="icon-tag" /> -->
             <span class="info-text"
               >{{ menuNameData.l_3 }} [{{ resolveNumber(deviceData.system) }}]
-              台</span
+              {{ $t("main2.tai") }}</span
             >
           </div>
         </div>
         <div class="info-wrap">
-          <h3 class="info-text">时间栏</h3>
+          <h3 class="info-text">{{ $t("main2.time") }}</h3>
           <div class="info-item">
             <!-- <SvgIcon name="runday" class="icon-tag" /> -->
             <span class="info-text"
-              >系统运行 {{ resolveNumber(runday) }} 天</span
+              >{{ $t("main2.runDay") }} {{ resolveNumber(runday) }}
+              {{ $t("main2.day") }}</span
             >
           </div>
           <div class="info-item">
             <!-- <SvgIcon name="time" class="icon-tag" /> -->
-            <span class="info-text">当前时间 {{ currentTime }}</span>
+            <span class="info-text"
+              >{{ $t("main2.nowTime") }} {{ currentTime }}</span
+            >
           </div>
           <div class="info-item">
             <!-- <SvgIcon name="date" class="icon-tag" /> -->
-            <span class="info-text">当前日期 {{ currentDate }}</span>
+            <span class="info-text"
+              >{{ $t("main2.nowDate") }} {{ currentDate }}</span
+            >
           </div>
           <div class="info-item" v-if="expireDateStatus">
             <!-- <SvgIcon name="stop" class="icon-tag" /> -->
             <span class="info-text"
-              >服务期限 <span>&nbsp;{{ serverDeadLine }}</span></span
+              >{{ $t("main2.serverLimit") }}
+              <span>&nbsp;{{ serverDeadLine }}</span></span
             >
           </div>
         </div>
       </a-col>
       <a-col :span="16" class="part center-part">
         <div class="host-info-head info-text" v-if="curHostIdx > -1">
-          当前设备:&nbsp;&nbsp;{{
+          {{ $t("main2.nowDevice") }}:&nbsp;&nbsp;{{
             hostList[curHostIdx].type
-          }}类设备&nbsp;&nbsp;{{ hostList[curHostIdx].name }}
+          }}&nbsp;&nbsp;{{ hostList[curHostIdx].name }}
         </div>
         <div class="chart-wrap">
           <div class="chart-item chart-first">
@@ -527,7 +597,7 @@ window.addEventListener("beforeunload", cleanAction);
               >{{ menuNameData.r_1 }} [<span>{{
                 resolveNumber(alarmData.total)
               }}</span
-              >] 台</span
+              >] {{ $t("main2.tai") }}</span
             >
           </div>
           <div class="info-item">
@@ -536,7 +606,7 @@ window.addEventListener("beforeunload", cleanAction);
               >{{ menuNameData.r_2 }} [<span>{{
                 resolveNumber(alarmData.network)
               }}</span
-              >] 台</span
+              >] {{ $t("main2.tai") }}</span
             >
           </div>
           <div class="info-item">
@@ -545,18 +615,18 @@ window.addEventListener("beforeunload", cleanAction);
               >{{ menuNameData.r_3 }} [<span>{{
                 resolveNumber(alarmData.system)
               }}</span
-              >] 台</span
+              >] {{ $t("main2.tai") }}</span
             >
           </div>
         </div>
         <div class="info-wrap">
-          <h3 class="info-text">报警类型栏</h3>
+          <h3 class="info-text">{{ $t("main2.warnType") }}</h3>
           <div class="info-item">
             <span class="info-text">
               <span class="warn-type-serial">①</span
               >{{ $t("main2.rightBottomWarn") }} [
               <span>{{ resolveNumber(alarmTypeData.warn) }}</span
-              >] 次</span
+              >] {{ $t("main2.ci") }}</span
             >
           </div>
           <div class="info-item">
@@ -565,7 +635,7 @@ window.addEventListener("beforeunload", cleanAction);
               >{{ $t("main2.rightBottomCommon") }} [<span>{{
                 resolveNumber(alarmTypeData.commonly)
               }}</span
-              >] 次</span
+              >] {{ $t("main2.ci") }}</span
             >
           </div>
           <div class="info-item">
@@ -574,7 +644,7 @@ window.addEventListener("beforeunload", cleanAction);
               >{{ $t("main2.rightBottomSerious") }} [<span>{{
                 resolveNumber(alarmTypeData.serious)
               }}</span
-              >] 次</span
+              >] {{ $t("main2.ci") }}</span
             >
           </div>
           <div class="info-item">
@@ -583,7 +653,7 @@ window.addEventListener("beforeunload", cleanAction);
               >{{ $t("main2.rightBottomDisaster") }} [<span>{{
                 resolveNumber(alarmTypeData.disaster)
               }}</span
-              >] 次</span
+              >] {{ $t("main2.ci") }}</span
             >
           </div>
         </div>
@@ -623,11 +693,12 @@ window.addEventListener("beforeunload", cleanAction);
     background: url("../assets/header-aside-bg.png") no-repeat center/100% 100%;
     &::before {
       position: absolute;
-      content: '';
+      content: "";
       width: 3rem;
       height: 0.5rem;
       top: 0.5rem;
-      background: url("../assets/header-aside-dot.png") no-repeat center/100% 100%;
+      background: url("../assets/header-aside-dot.png") no-repeat center/100%
+        100%;
     }
   }
   .left-bg {
@@ -647,10 +718,11 @@ window.addEventListener("beforeunload", cleanAction);
     flex: 1;
     color: #fff;
     font-size: 3rem;
-    font-family: YouSheBiaoTiHei;
-    font-weight: 400;
+    /* font-family: YouSheBiaoTiHei; */
+    font-weight: 600;
     display: inline-block;
     position: relative;
+    padding-top: 2rem;
     &::before,
     &::after {
       position: absolute;
@@ -726,7 +798,7 @@ window.addEventListener("beforeunload", cleanAction);
   margin-bottom: 2.5rem;
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: center;
   width: 100%;
 
   .icon-tag {
@@ -740,6 +812,7 @@ window.addEventListener("beforeunload", cleanAction);
   span {
     display: inline-block;
     margin-right: 1rem;
+    color: #fff;
   }
   a {
     color: #fff;

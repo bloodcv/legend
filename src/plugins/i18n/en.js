@@ -107,5 +107,15 @@ export default {
         rightBottomCommon: 'Common',
         rightBottomSerious: 'Serious',
         rightBottomDisaster: 'Disaster',
+        tai: '',
+        ci: 'Times',
+        warnType: 'Warn Type',
+        time: 'Time',
+        day: 'Days',
+        runDay: 'Run Day',
+        nowTime: 'Now Time',
+        nowDate: 'Now Date',
+        serverLimit: 'Server Limit',
+        nowDevice: 'Now Device'
     }
 }

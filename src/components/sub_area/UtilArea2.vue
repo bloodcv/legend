@@ -13,6 +13,26 @@ const props = defineProps({
 });
 const emit = defineEmits(["updateMenuData", "changeHostList"]);
 
+const showPassModal = ref(false)
+
+const configPassword = ref("")
+function checkPass() {
+  if (String(configPassword.value) === String(import.meta.env.VITE_CONFIG_PASSWORD)) {
+    showPassModal.value = false
+    configPassword.value = ""
+    openConfigModal()
+  } else {
+    notification.error({
+      message: "密码错误",
+      description: "请重新输入密码。"
+    })
+  }
+}
+
+function openPassModal() {
+  showPassModal.value = true
+}
+
 //使用父组件传递过来的值
 const { menuData, originHostList, hostList } = toRefs(props);
 
@@ -45,8 +65,9 @@ function setLocale(localeString) {
   locale.value = localeString;
   localStorage.setItem("locale", localeString);
 }
-
-const updateMenuApi = "http://101.132.244.36/api/saveMenu";
+import {ZABBIX_API} from "@/constants.js";
+import {notification} from "ant-design-vue";
+const updateMenuApi = ZABBIX_API + "/saveMenu";
 const changeMainTitle = async () => {
   try {
     await axios.post(updateMenuApi, {
@@ -105,15 +126,15 @@ const columns = [
     dataIndex: "ip",
   },
   {
-    title: "设备名称",
+    title: "name",
     dataIndex: "name",
   },
   {
-    title: "设备类型",
+    title: "type",
     dataIndex: "type",
   },
 ];
- 
+
 const onSelectionChange = (selectedRowKeys, selectedRows) => {
   selectedRowKeysBind.value = selectedRowKeys;
 }
@@ -124,7 +145,7 @@ const changeHostListInChild = () => {
 
 <template>
   <div class="util-area">
-    <div class="util-config" @click="openConfigModal">
+    <div class="util-config" @click="openPassModal">
         <img src="../../assets/setting.png" class="tool-icon" />
     </div>
     <a-dropdown placement="bottomRight">
@@ -143,6 +164,21 @@ const changeHostListInChild = () => {
       </template>
     </a-dropdown>
   </div>
+
+  <a-modal
+      v-model:open="showPassModal"
+      :title="$t('subArea.utilArea.config.password.title')"
+      @ok="checkPass"
+  >
+    <a-form>
+      <a-form-item>
+        <div class="input-label">{{$t('subArea.utilArea.config.password.label')}}</div>
+        <a-input-password v-model:value="configPassword" @press-enter="checkPass"></a-input-password>
+      </a-form-item>
+    </a-form>
+  </a-modal>
+
+
   <a-modal v-model:open="showConfigModal" :title="$t('subArea.utilArea.config.change.title')" :footer="null"
     :width="800">
     <a-form :wrapper-col="{ span: 16 }">

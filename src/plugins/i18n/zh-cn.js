@@ -107,5 +107,15 @@ export default {
         rightBottomCommon: '一般',
         rightBottomSerious: '严重',
         rightBottomDisaster: '灾难',
+        tai: '台',
+        ci: '次',
+        warnType: '报警类型栏',
+        time: '时间栏',
+        day: '天',
+        runDay: '系统运行',
+        nowTime: '当前时间',
+        nowDate: '当前日期',
+        serverLimit: '服务期限',
+        nowDevice: '当前设备'
     }
 }
