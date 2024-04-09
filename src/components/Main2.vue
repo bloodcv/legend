@@ -500,7 +500,7 @@ window.addEventListener("beforeunload", cleanAction);
   <div class="main-wrap">
     <div class="header">
       <div class="left-bg"></div>
-      <span class="header-title">{{ menuNameData.name }}哈哈哈哈</span>
+      <span class="header-title">{{ menuNameData.name }}</span>
       <div class="right-bg"></div>
       <div class="tool-wrap">
         <UtilArea2
@@ -569,9 +569,7 @@ window.addEventListener("beforeunload", cleanAction);
       </a-col>
       <a-col :span="16" class="part center-part">
         <div class="host-info-head info-text" v-if="curHostIdx > -1">
-          {{ $t("main2.nowDevice") }}:&nbsp;&nbsp;{{
-            hostList[curHostIdx].type
-          }}&nbsp;&nbsp;{{ hostList[curHostIdx].name }}
+          {{ $t("main2.nowDevice") }}:&nbsp;&nbsp;{{ hostList[curHostIdx].name }}
         </div>
         <div class="chart-wrap">
           <div class="chart-item chart-first">
