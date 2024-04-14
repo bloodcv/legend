@@ -37,15 +37,15 @@ function openPassModal() {
 const { menuData, originHostList, hostList } = toRefs(props);
 
 const menuNameData = reactive({
-  l_1: "",
-  l_2: "",
-  l_3: "",
-  l_title: "",
+  l_1s: "",
+  l_2s: "",
+  l_3s: "",
+  l_title1: "",
   name: "",
-  r_1: "",
-  r_2: "",
-  r_3: "",
-  r_title: "",
+  r_1s: "",
+  r_2s: "",
+  r_3s: "",
+  r_title1: "",
 });
 
 const showConfigModal = ref(false);
@@ -83,16 +83,16 @@ const changeMainTitle = async () => {
 const changeLeftMenu = async () => {
   try {
     await axios.post(updateMenuApi, {
-      l_1: menuNameData.l_1,
-      l_2: menuNameData.l_2,
-      l_3: menuNameData.l_3,
-      l_title: menuNameData.l_title,
+      l_1s: menuNameData.l_1s,
+      l_2s: menuNameData.l_2s,
+      l_3s: menuNameData.l_3s,
+      l_title1: menuNameData.l_title1,
     });
     emit("updateMenuData", {
-      l_1: menuNameData.l_1,
-      l_2: menuNameData.l_2,
-      l_3: menuNameData.l_3,
-      l_title: menuNameData.l_title,
+      l_1s: menuNameData.l_1s,
+      l_2s: menuNameData.l_2s,
+      l_3s: menuNameData.l_3s,
+      l_title1: menuNameData.l_title1,
     });
   } catch (error) {
     console.error("error: update left menu", error.message);
@@ -101,16 +101,16 @@ const changeLeftMenu = async () => {
 const changeRightMenu = async () => {
   try {
     await axios.post(updateMenuApi, {
-      r_1: menuNameData.r_1,
-      r_2: menuNameData.r_2,
-      r_3: menuNameData.r_3,
-      r_title: menuNameData.r_title,
+      r_1s: menuNameData.r_1s,
+      r_2s: menuNameData.r_2s,
+      r_3s: menuNameData.r_3s,
+      r_title1: menuNameData.r_title1,
     });
     emit("updateMenuData", {
-      r_1: menuNameData.r_1,
-      r_2: menuNameData.r_2,
-      r_3: menuNameData.r_3,
-      r_title: menuNameData.r_title,
+      r_1s: menuNameData.r_1s,
+      r_2s: menuNameData.r_2s,
+      r_3s: menuNameData.r_3s,
+      r_title1: menuNameData.r_title1,
     });
   } catch (error) {
     console.error("error: update right menu", error.message);
@@ -133,20 +133,20 @@ const columns = [
     title: "type",
     dataIndex: "type",
   },
-];
+]
 
 const onSelectionChange = (selectedRowKeys, selectedRows) => {
   selectedRowKeysBind.value = selectedRowKeys;
 }
 const changeHostListInChild = () => {
-    emit("changeHostList", selectedRowKeysBind.value);
+  emit("changeHostList", selectedRowKeysBind.value);
 }
 </script>
 
 <template>
   <div class="util-area">
     <div class="util-config" @click="openPassModal">
-        <img src="../../assets/setting.png" class="tool-icon" />
+      <img src="../../assets/setting.png" class="tool-icon" />
     </div>
     <a-dropdown placement="bottomRight">
       <div class="util-translate">
@@ -180,15 +180,15 @@ const changeHostListInChild = () => {
 
 
   <a-modal v-model:open="showConfigModal" :title="$t('subArea.utilArea.config.change.title')" :footer="null"
-    :width="800">
+           :width="800">
     <a-form :wrapper-col="{ span: 16 }">
       <a-collapse v-model:active-key(v-model)="configCollapseActiveKey">
         <a-collapse-panel key="hostSec" :header="$t('main2.hostSec')">
           <a-table :pagination="false" :scroll="{ y: 240 }"
-          :data-source="originHostList"
-          :columns="columns"
-          :rowSelection="{ selectedRowKeys: selectedRowKeysBind, onChange: onSelectionChange }"
-            rowKey="hostid" />
+                   :data-source="originHostList"
+                   :columns="columns"
+                   :rowSelection="{ selectedRowKeys: selectedRowKeysBind, onChange: onSelectionChange }"
+                   rowKey="hostid" />
           <div class="act">
             <a-button type="primary" class="mt" @click="changeHostListInChild">ok</a-button>
           </div>
@@ -200,19 +200,19 @@ const changeHostListInChild = () => {
           </div>
         </a-collapse-panel>
         <a-collapse-panel class="menu-setting-wrap" key="leftMenu" :header="$t('main2.leftMenu')">
-          <a-input v-model:value="menuNameData.l_title" />
-          <a-input v-model:value="menuNameData.l_1" />
-          <a-input v-model:value="menuNameData.l_2" />
-          <a-input v-model:value="menuNameData.l_3" />
+          <a-input v-model:value="menuNameData.l_title1" />
+          <a-input v-model:value="menuNameData.l_1s" />
+          <a-input v-model:value="menuNameData.l_2s" />
+          <a-input v-model:value="menuNameData.l_3s" />
           <div class="act">
             <a-button type="primary" class="mt" @click="changeLeftMenu">ok</a-button>
           </div>
         </a-collapse-panel>
         <a-collapse-panel class="menu-setting-wrap" key="rightMenu" :header="$t('main2.rightMenu')">
-          <a-input v-model:value="menuNameData.r_title" />
-          <a-input v-model:value="menuNameData.r_1" />
-          <a-input v-model:value="menuNameData.r_2" />
-          <a-input v-model:value="menuNameData.r_3" />
+          <a-input v-model:value="menuNameData.r_title1" />
+          <a-input v-model:value="menuNameData.r_1s" />
+          <a-input v-model:value="menuNameData.r_2s" />
+          <a-input v-model:value="menuNameData.r_3s" />
           <div class="act">
             <a-button type="primary" class="mt" @click="changeRightMenu">ok</a-button>
           </div>
@@ -223,10 +223,10 @@ const changeHostListInChild = () => {
 </template>
 
 <style lang="scss" scoped>
-  .tool-icon {
-    width: 2.25rem;
-    height: 2.25rem;
-  }
+.tool-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+}
 .util-area {
   height: 7.44rem;
   width: 100%;

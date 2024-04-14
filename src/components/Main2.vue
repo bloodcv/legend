@@ -45,15 +45,15 @@ const defaultTimeGetDeviceAndAlarm = 60000; // 1m
 const source = axios.CancelToken.source();
 
 const menuNameData = reactive({
-  l_1: "",
-  l_2: "",
-  l_3: "",
-  l_title: "",
+  l_1s: "",
+  l_2s: "",
+  l_3s: "",
+  l_title1: "",
   name: "",
-  r_1: "",
-  r_2: "",
-  r_3: "",
-  r_title: "",
+  r_1s: "",
+  r_2s: "",
+  r_3s: "",
+  r_title1: "",
 });
 const deviceData = reactive({
   total: 0,
@@ -76,7 +76,7 @@ const enterpriseInfo = reactive({
   status: 0,
   url: "",
 });
-const runday = ref("");
+const rundays = ref("");
 const expireDateStatus = ref("");
 const currentTime = ref(dayjs().format("HH:mm:ss"));
 const currentTimeUpdate = ref();
@@ -148,7 +148,10 @@ const setHostDetail = (detail, idx) => {
   chartDataTemp.fourthData = fourthData;
   chartFirstInstance.setOption({
     title: {
-      text: localStorage.getItem('locale') === 'en' ? firstData.enName : firstData.name,
+      text:
+        localStorage.getItem("locale") === "en"
+          ? firstData.enName
+          : firstData.name,
       textStyle,
       textAlign: "left",
     },
@@ -179,7 +182,10 @@ const setHostDetail = (detail, idx) => {
   });
   chartSecondInstance.setOption({
     title: {
-      text: localStorage.getItem('locale') === 'en' ? secondData.enName : secondData.name,
+      text:
+        localStorage.getItem("locale") === "en"
+          ? secondData.enName
+          : secondData.name,
       textStyle,
       textAlign: "left",
     },
@@ -210,7 +216,10 @@ const setHostDetail = (detail, idx) => {
   });
   chartThirdInstance.setOption({
     title: {
-      text: localStorage.getItem('locale') === 'en' ? thirdData.enName : thirdData.name,
+      text:
+        localStorage.getItem("locale") === "en"
+          ? thirdData.enName
+          : thirdData.name,
       textStyle,
       textAlign: "left",
     },
@@ -254,7 +263,10 @@ const setHostDetail = (detail, idx) => {
   });
   chartFourthInstance.setOption({
     title: {
-      text: localStorage.getItem('locale') === 'en' ? fourthData.enName : fourthData.name,
+      text:
+        localStorage.getItem("locale") === "en"
+          ? fourthData.enName
+          : fourthData.name,
       textStyle,
       textAlign: "left",
     },
@@ -303,20 +315,20 @@ const getMenuName = async () => {
  *
  * get host list
  *
- * get runday number
+ * get rundays number
  */
 const getEnvInfo = async (init = false) => {
   try {
     const {
       data: { data: envInfoRes },
     } = await axios.get(EnvInfoApi);
-    Object.keys(deviceData).map(_ => (deviceData[_] = envInfoRes.device[_]));
+    Object.keys(deviceData).map(_ => (deviceData[_] = envInfoRes.devices[_]));
     Object.keys(alarmData).map(_ => (alarmData[_] = envInfoRes.alarm[_]));
     if (init) {
       Object.keys(enterpriseInfo).map(
         _ => (enterpriseInfo[_] = envInfoRes.enterpriseInfo[_])
       );
-      runday.value = envInfoRes.runday || 0;
+      rundays.value = envInfoRes.rundays || 0;
       expireDateStatus.value = envInfoRes.expireDateStatus;
       setHostInfo(envInfoRes.list);
     }
@@ -421,24 +433,36 @@ const languageChange = e => {
   if (e.key === "locale") {
     chartFirstInstance.setOption({
       title: {
-        text: e.newValue === 'en' ? chartDataTemp.firstData.enName : chartDataTemp.firstData.name,
-      }
-    })
+        text:
+          e.newValue === "en"
+            ? chartDataTemp.firstData.enName
+            : chartDataTemp.firstData.name,
+      },
+    });
     chartSecondInstance.setOption({
       title: {
-        text: e.newValue === 'en' ? chartDataTemp.secondData.enName : chartDataTemp.secondData.name,
-      }
-    })
+        text:
+          e.newValue === "en"
+            ? chartDataTemp.secondData.enName
+            : chartDataTemp.secondData.name,
+      },
+    });
     chartThirdInstance.setOption({
       title: {
-        text: e.newValue === 'en' ? chartDataTemp.thirdData.enName : chartDataTemp.thirdData.name,
-      }
-    })
+        text:
+          e.newValue === "en"
+            ? chartDataTemp.thirdData.enName
+            : chartDataTemp.thirdData.name,
+      },
+    });
     chartFourthInstance.setOption({
       title: {
-        text: e.newValue === 'en' ? chartDataTemp.fourthData.enName : chartDataTemp.fourthData.name,
-      }
-    })
+        text:
+          e.newValue === "en"
+            ? chartDataTemp.fourthData.enName
+            : chartDataTemp.fourthData.name,
+      },
+    });
   }
 };
 
@@ -478,8 +502,7 @@ onMounted(async () => {
   // window.addEventListener("storage", languageChange);
 
   //添加setItemEvent监听事件
-  window.addEventListener("setItemEvent", languageChange)
-
+  window.addEventListener("setItemEvent", languageChange);
 });
 
 const cleanAction = () => {
@@ -514,25 +537,25 @@ window.addEventListener("beforeunload", cleanAction);
     <a-row class="content-wrap">
       <a-col :span="4" class="part left-part">
         <div class="info-wrap">
-          <h3 class="info-text">{{ menuNameData.l_title }}</h3>
+          <h3 class="info-text">{{ menuNameData.l_title1 }}</h3>
           <div class="info-item">
             <!-- <SvgIcon name="switch-menu" class="icon-tag" /> -->
             <span class="info-text"
-              >{{ menuNameData.l_1 }} [{{ resolveNumber(deviceData.total) }}]
+              >{{ menuNameData.l_1s }} [{{ resolveNumber(deviceData.total) }}]
               {{ $t("main2.tai") }}</span
             >
           </div>
           <div class="info-item">
             <!-- <SvgIcon name="server-menu" class="icon-tag" /> -->
             <span class="info-text"
-              >{{ menuNameData.l_2 }} [{{ resolveNumber(deviceData.network) }}]
+              >{{ menuNameData.l_2s }} [{{ resolveNumber(deviceData.network) }}]
               {{ $t("main2.tai") }}</span
             >
           </div>
           <div class="info-item">
             <!-- <SvgIcon name="vm-menu" class="icon-tag" /> -->
             <span class="info-text"
-              >{{ menuNameData.l_3 }} [{{ resolveNumber(deviceData.system) }}]
+              >{{ menuNameData.l_3s }} [{{ resolveNumber(deviceData.system) }}]
               {{ $t("main2.tai") }}</span
             >
           </div>
@@ -540,9 +563,9 @@ window.addEventListener("beforeunload", cleanAction);
         <div class="info-wrap">
           <h3 class="info-text">{{ $t("main2.time") }}</h3>
           <div class="info-item">
-            <!-- <SvgIcon name="runday" class="icon-tag" /> -->
+            <!-- <SvgIcon name="rundays" class="icon-tag" /> -->
             <span class="info-text"
-              >{{ $t("main2.runDay") }} {{ resolveNumber(runday) }}
+              >{{ $t("main2.runDay") }} {{ resolveNumber(rundays) }}
               {{ $t("main2.day") }}</span
             >
           </div>
@@ -569,7 +592,9 @@ window.addEventListener("beforeunload", cleanAction);
       </a-col>
       <a-col :span="16" class="part center-part">
         <div class="host-info-head info-text" v-if="curHostIdx > -1">
-          {{ $t("main2.nowDevice") }}:&nbsp;&nbsp;{{ hostList[curHostIdx].name }}
+          {{ $t("main2.nowDevice") }}:&nbsp;&nbsp;{{
+            hostList[curHostIdx].name
+          }}
         </div>
         <div class="chart-wrap">
           <div class="chart-item chart-first">
@@ -588,11 +613,11 @@ window.addEventListener("beforeunload", cleanAction);
       </a-col>
       <a-col :span="4" class="part right-part">
         <div class="info-wrap">
-          <h3 class="info-text">{{ menuNameData.r_title }}</h3>
+          <h3 class="info-text">{{ menuNameData.r_title1 }}</h3>
           <div class="info-item">
             <!-- <SvgIcon name="switch-menu" class="icon-tag" /> -->
             <span class="info-text"
-              >{{ menuNameData.r_1 }} [<span>{{
+              >{{ menuNameData.r_1s }} [<span>{{
                 resolveNumber(alarmData.total)
               }}</span
               >] {{ $t("main2.tai") }}</span
@@ -601,7 +626,7 @@ window.addEventListener("beforeunload", cleanAction);
           <div class="info-item">
             <!-- <SvgIcon name="server-menu" class="icon-tag" /> -->
             <span class="info-text"
-              >{{ menuNameData.r_2 }} [<span>{{
+              >{{ menuNameData.r_2s }} [<span>{{
                 resolveNumber(alarmData.network)
               }}</span
               >] {{ $t("main2.tai") }}</span
@@ -610,7 +635,7 @@ window.addEventListener("beforeunload", cleanAction);
           <div class="info-item">
             <!-- <SvgIcon name="vm-menu" class="icon-tag" /> -->
             <span class="info-text"
-              >{{ menuNameData.r_3 }} [<span>{{
+              >{{ menuNameData.r_3s }} [<span>{{
                 resolveNumber(alarmData.system)
               }}</span
               >] {{ $t("main2.tai") }}</span
@@ -622,36 +647,45 @@ window.addEventListener("beforeunload", cleanAction);
           <div class="info-item">
             <span class="info-text">
               <span class="warn-type-serial">①</span
-              >{{ $t("main2.rightBottomWarn") }} [
-              <span>{{ resolveNumber(alarmTypeData.warn) }}</span
-              >] {{ $t("main2.ci") }}</span
+              >{{ $t("main2.rightBottomWarn") }}
+              <span
+                >&nbsp;&nbsp;[{{
+                  resolveNumber(alarmTypeData.warn)
+                }}]&nbsp;&nbsp;</span
+              >{{ $t("main2.ci") }}</span
             >
           </div>
           <div class="info-item">
             <span class="info-text"
               ><span class="warn-type-serial">②</span
-              >{{ $t("main2.rightBottomCommon") }} [<span>{{
-                resolveNumber(alarmTypeData.commonly)
-              }}</span
-              >] {{ $t("main2.ci") }}</span
+              >{{ $t("main2.rightBottomCommon")
+              }}<span
+                >&nbsp;&nbsp;[{{
+                  resolveNumber(alarmTypeData.commonly)
+                }}]&nbsp;&nbsp;</span
+              >{{ $t("main2.ci") }}</span
             >
           </div>
           <div class="info-item">
             <span class="info-text"
               ><span class="warn-type-serial">③</span
-              >{{ $t("main2.rightBottomSerious") }} [<span>{{
-                resolveNumber(alarmTypeData.serious)
-              }}</span
-              >] {{ $t("main2.ci") }}</span
+              >{{ $t("main2.rightBottomSerious")
+              }}<span
+                >&nbsp;&nbsp;[{{
+                  resolveNumber(alarmTypeData.serious)
+                }}]&nbsp;&nbsp;</span
+              >{{ $t("main2.ci") }}</span
             >
           </div>
           <div class="info-item">
             <span class="info-text"
               ><span class="warn-type-serial">④</span
-              >{{ $t("main2.rightBottomDisaster") }} [<span>{{
-                resolveNumber(alarmTypeData.disaster)
-              }}</span
-              >] {{ $t("main2.ci") }}</span
+              >{{ $t("main2.rightBottomDisaster")
+              }}<span
+                >&nbsp;&nbsp;[{{
+                  resolveNumber(alarmTypeData.disaster)
+                }}]&nbsp;&nbsp;</span
+              >{{ $t("main2.ci") }}</span
             >
           </div>
         </div>
@@ -762,7 +796,6 @@ window.addEventListener("beforeunload", cleanAction);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem 0 0 1.125rem;
   min-height: 24.125rem;
   align-items: start;
   .info-item:last-child {
@@ -776,6 +809,7 @@ window.addEventListener("beforeunload", cleanAction);
     color: #ffffff;
     line-height: 1;
     margin-bottom: 3rem;
+    padding: 1rem 0 0 1.125rem;
   }
 }
 
@@ -796,7 +830,8 @@ window.addEventListener("beforeunload", cleanAction);
   margin-bottom: 2.5rem;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
+  padding-left: 2rem;
   width: 100%;
 
   .icon-tag {
