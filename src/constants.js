@@ -7,7 +7,7 @@ export const DANGER_COLOR = '#DD4747'
 
 const ZABBIX_SCHEMA = import.meta.env.VITE_ZABBIX_SCHEMA
 const ZABBIX_DOMAIN = import.meta.env.VITE_ZABBIX_DOMAIN
-export const ZABBIX_API = `${ZABBIX_SCHEMA}://${ZABBIX_DOMAIN}/api_jsonrpc.php`
+export const ZABBIX_API = `${ZABBIX_SCHEMA}://${ZABBIX_DOMAIN}/api`
 
 export const ZABBIX_CREDENTIALS = {
     username: import.meta.env.VITE_ZABBIX_ACCOUNT,

@@ -8,6 +8,13 @@ import { KJUR } from "jsrsasign";
 import SvgIcon from "@/components/SvgIcon.vue";
 import UtilArea2 from "@/components/sub_area/UtilArea2.vue";
 
+const JI_FANG_HUANG_JIN_LINK_NAME = 'jiFangHuangJinLink'
+const TIME_CYCLE = 'timeCycle'
+const TIME_GET_HOST_INFO = "timeGetHostInfo"
+const TIME_GET_HOST_INFO_DEFAULT = 30000
+const TIME_GET_DEVICE_AND_ALARM = "timeGetDeviceAndAlarm"
+const TIME_GET_DEVICE_AND_ALARM_DEFAULT = 60000
+
 const lineOption = {
   grid: {
     left: "3%",
@@ -40,20 +47,27 @@ const EnvInfoApi = ZABBIX_API + "/getHostNumber";
 const hostInfoApi = ZABBIX_API + "/getHostInfo"; // hostid 10084
 const menuNameApi = ZABBIX_API + "/getMenuList";
 // const updateMenuApi = "http://101.132.244.36/api/saveMenu";
-const defaultTimeGetHostInfo = 30000; // 30s
-const defaultTimeGetDeviceAndAlarm = 60000; // 1m
+// const timeGetHostInfo = ref(30000); // 30s
+const timeGetHostInfo = ref(Number(localStorage.getItem(TIME_GET_HOST_INFO)) || TIME_GET_HOST_INFO_DEFAULT); // 30s
+const timeGetDeviceAndAlarm = ref(Number(localStorage.getItem(TIME_GET_DEVICE_AND_ALARM)) || TIME_GET_DEVICE_AND_ALARM_DEFAULT); // 1m
+// const timeGetDeviceAndAlarm = ref(60000); // 1m
 const source = axios.CancelToken.source();
 
 const menuNameData = reactive({
   l_1s: "",
   l_2s: "",
   l_3s: "",
+  l_4s: "",
   l_title1: "",
   name: "",
   r_1s: "",
   r_2s: "",
   r_3s: "",
   r_title1: "",
+  alert_1: "",
+  alert_2: "",
+  alert_3: "",
+  alert_4: "",
 });
 const deviceData = reactive({
   total: 0,
@@ -103,6 +117,7 @@ const chartThirdRef = ref();
 let chartThirdInstance = null;
 const chartFourthRef = ref();
 let chartFourthInstance = null;
+const timeCycle = ref(localStorage.getItem(TIME_CYCLE) || 0.5)
 
 /**
  * resolve number to show at least three digits and fill by 0 in head
@@ -348,6 +363,7 @@ const getHostInfoById = async () => {
     } = await axios.get(hostInfoApi, {
       params: {
         hostid: hostList.value[currentHostIdx].hostid,
+        time_cycle: Number(timeCycle.value)
       },
       cancelToken: source.token,
     });
@@ -365,20 +381,22 @@ const getHostInfoById = async () => {
  * get host info by id every defaultTimeGetHostInfo ms
  */
 const beginHostUpdate = () => {
+  clearInterval(hostUpdate.value)
   getHostInfoById();
   hostUpdate.value = setInterval(() => {
     getHostInfoById();
-  }, defaultTimeGetHostInfo);
+  }, timeGetHostInfo.value);
 };
 
 /**
  * get device & alarm info every defaultTimeGetDeviceAndAlarm ms
  */
 const beginDeviceAndAlarmUpdate = async () => {
+  clearInterval(deviceAndAlarmUpdate.value)
   await getEnvInfo(true);
   deviceAndAlarmUpdate.value = setInterval(() => {
     getEnvInfo();
-  }, defaultTimeGetDeviceAndAlarm);
+  }, timeGetDeviceAndAlarm.value);
 };
 
 /**
@@ -411,12 +429,40 @@ const initChart = () => {
   });
 };
 
+const jiFangHuangJinLink = ref(
+  localStorage.getItem(JI_FANG_HUANG_JIN_LINK_NAME) || ""
+);
+const jumpJiFangHuangJin = () => {
+  if (jiFangHuangJinLink.value) {
+    window.open(jiFangHuangJinLink.value, "_blank");
+  }
+};
 const updateMenuData = params => {
+  jiFangHuangJinLink.value = params.jiFangHuangJinLink || "";
+  localStorage.setItem(JI_FANG_HUANG_JIN_LINK_NAME, jiFangHuangJinLink.value)
+  delete params.jiFangHuangJinLink;
   Object.keys(params).map(_ => (menuNameData[_] = params[_]));
 };
 
+const updateTimeCycle = params => {
+  timeCycle.value = params
+  localStorage.setItem(TIME_CYCLE, timeCycle.value)
+  beginHostUpdate()
+}
+
+const updateChartTimeCycle = params => {
+  timeGetHostInfo.value = Number(params) || TIME_GET_HOST_INFO_DEFAULT
+  localStorage.setItem(TIME_GET_HOST_INFO, timeGetHostInfo.value)
+  beginHostUpdate()
+}
+const updateDeviceAndAlarmTimeCycle = params => {
+  timeGetDeviceAndAlarm.value = Number(params) || TIME_GET_DEVICE_AND_ALARM_DEFAULT
+  localStorage.setItem(TIME_GET_DEVICE_AND_ALARM, timeGetDeviceAndAlarm.value)
+  beginDeviceAndAlarmUpdate()
+}
+
 const changeHostList = param => {
-  hostUpdate.value = null;
+  clearInterval(hostUpdate.value)
   const newHostList = originHostList.value.filter(_ => {
     return param.includes(_.hostid);
   });
@@ -507,9 +553,9 @@ onMounted(async () => {
 
 const cleanAction = () => {
   // remove interval event
-  currentTimeUpdate.value = null;
-  deviceAndAlarmUpdate.value = null;
-  hostUpdate.value = null;
+  clearInterval(currentTimeUpdate.value)
+  clearInterval(deviceAndAlarmUpdate.value)
+  clearInterval(hostUpdate.value)
   window.removeEventListener("resize", handleResize);
   window.removeEventListener("beforeunload", cleanAction);
   window.removeEventListener("setItemEvent", languageChange);
@@ -531,7 +577,10 @@ window.addEventListener("beforeunload", cleanAction);
           :originHostList="originHostList"
           :hostList="hostList"
           @updateMenuData="updateMenuData"
-          @changeHostList="changeHostList" />
+          @updateTimeCycle="updateTimeCycle"
+          @changeHostList="changeHostList"
+          @updateChartTimeCycle="updateChartTimeCycle"
+          @updateDeviceAndAlarmTimeCycle="updateDeviceAndAlarmTimeCycle" />
       </div>
     </div>
     <a-row class="content-wrap">
@@ -540,22 +589,29 @@ window.addEventListener("beforeunload", cleanAction);
           <h3 class="info-text">{{ menuNameData.l_title1 }}</h3>
           <div class="info-item">
             <!-- <SvgIcon name="switch-menu" class="icon-tag" /> -->
-            <span class="info-text"
+            <span class="info-text" v-if="menuNameData.l_1s"
               >{{ menuNameData.l_1s }} [{{ resolveNumber(deviceData.total) }}]
               {{ $t("main2.tai") }}</span
             >
           </div>
           <div class="info-item">
             <!-- <SvgIcon name="server-menu" class="icon-tag" /> -->
-            <span class="info-text"
+            <span class="info-text" v-if="menuNameData.l_2s"
               >{{ menuNameData.l_2s }} [{{ resolveNumber(deviceData.network) }}]
               {{ $t("main2.tai") }}</span
             >
           </div>
           <div class="info-item">
             <!-- <SvgIcon name="vm-menu" class="icon-tag" /> -->
-            <span class="info-text"
+            <span class="info-text" v-if="menuNameData.l_3s"
               >{{ menuNameData.l_3s }} [{{ resolveNumber(deviceData.system) }}]
+              {{ $t("main2.tai") }}</span
+            >
+          </div>
+          <div class="info-item link-item" @click="jumpJiFangHuangJin">
+            <!-- <SvgIcon name="vm-menu" class="icon-tag" /> -->
+            <span class="info-text" v-if="menuNameData.l_4s"
+              >{{ menuNameData.l_4s }} [{{ resolveNumber(0) }}]
               {{ $t("main2.tai") }}</span
             >
           </div>
@@ -584,8 +640,8 @@ window.addEventListener("beforeunload", cleanAction);
           <div class="info-item" v-if="expireDateStatus">
             <!-- <SvgIcon name="stop" class="icon-tag" /> -->
             <span class="info-text"
-              >{{ $t("main2.serverLimit") }}
-              <span>&nbsp;{{ serverDeadLine }}</span></span
+              >{{ $t("main2.serverLimit") }}&nbsp;{{ serverDeadLine }}
+              </span
             >
           </div>
         </div>
@@ -616,7 +672,7 @@ window.addEventListener("beforeunload", cleanAction);
           <h3 class="info-text">{{ menuNameData.r_title1 }}</h3>
           <div class="info-item">
             <!-- <SvgIcon name="switch-menu" class="icon-tag" /> -->
-            <span class="info-text"
+            <span class="info-text" v-if="menuNameData.r_1s"
               >{{ menuNameData.r_1s }} [<span>{{
                 resolveNumber(alarmData.total)
               }}</span
@@ -625,7 +681,7 @@ window.addEventListener("beforeunload", cleanAction);
           </div>
           <div class="info-item">
             <!-- <SvgIcon name="server-menu" class="icon-tag" /> -->
-            <span class="info-text"
+            <span class="info-text" v-if="menuNameData.r_2s"
               >{{ menuNameData.r_2s }} [<span>{{
                 resolveNumber(alarmData.network)
               }}</span
@@ -634,7 +690,7 @@ window.addEventListener("beforeunload", cleanAction);
           </div>
           <div class="info-item">
             <!-- <SvgIcon name="vm-menu" class="icon-tag" /> -->
-            <span class="info-text"
+            <span class="info-text" v-if="menuNameData.r_3s"
               >{{ menuNameData.r_3s }} [<span>{{
                 resolveNumber(alarmData.system)
               }}</span
@@ -644,10 +700,11 @@ window.addEventListener("beforeunload", cleanAction);
         </div>
         <div class="info-wrap">
           <h3 class="info-text">{{ $t("main2.warnType") }}</h3>
-          <div class="info-item">
+          <div class="info-item" v-if="menuNameData.alert_1">
             <span class="info-text">
-              <span class="warn-type-serial">①</span
-              >{{ $t("main2.rightBottomWarn") }}
+              <!-- <span class="warn-type-serial">①</span> -->
+              <!-- {{ $t("main2.rightBottomWarn") }} -->
+              {{ menuNameData.alert_1 }}
               <span
                 >&nbsp;&nbsp;[{{
                   resolveNumber(alarmTypeData.warn)
@@ -656,10 +713,11 @@ window.addEventListener("beforeunload", cleanAction);
             >
           </div>
           <div class="info-item">
-            <span class="info-text"
-              ><span class="warn-type-serial">②</span
-              >{{ $t("main2.rightBottomCommon")
-              }}<span
+            <span class="info-text" v-if="menuNameData.alert_2">
+              <!-- <span class="warn-type-serial">②</span> -->
+              <!-- {{ $t("main2.rightBottomCommon") }} -->
+              {{ menuNameData.alert_2 }}
+              <span
                 >&nbsp;&nbsp;[{{
                   resolveNumber(alarmTypeData.commonly)
                 }}]&nbsp;&nbsp;</span
@@ -667,10 +725,11 @@ window.addEventListener("beforeunload", cleanAction);
             >
           </div>
           <div class="info-item">
-            <span class="info-text"
-              ><span class="warn-type-serial">③</span
-              >{{ $t("main2.rightBottomSerious")
-              }}<span
+            <span class="info-text" v-if="menuNameData.alert_3">
+              <!-- <span class="warn-type-serial">③</span> -->
+              <!-- {{ $t("main2.rightBottomSerious") }} -->
+              {{ menuNameData.alert_3 }}
+              <span
                 >&nbsp;&nbsp;[{{
                   resolveNumber(alarmTypeData.serious)
                 }}]&nbsp;&nbsp;</span
@@ -678,10 +737,11 @@ window.addEventListener("beforeunload", cleanAction);
             >
           </div>
           <div class="info-item">
-            <span class="info-text"
-              ><span class="warn-type-serial">④</span
-              >{{ $t("main2.rightBottomDisaster")
-              }}<span
+            <span class="info-text" v-if="menuNameData.alert_4">
+              <!-- <span class="warn-type-serial">④</span> -->
+              <!-- {{ $t("main2.rightBottomDisaster") }} -->
+              {{ menuNameData.alert_4 }}
+              <span
                 >&nbsp;&nbsp;[{{
                   resolveNumber(alarmTypeData.disaster)
                 }}]&nbsp;&nbsp;</span
@@ -701,6 +761,9 @@ window.addEventListener("beforeunload", cleanAction);
 </template>
 
 <style scoped lang="scss">
+.link-item {
+  cursor: pointer;
+}
 .main-wrap {
   background: url("../assets/main-bg.png") no-repeat center/100% 100%;
 }
@@ -814,6 +877,7 @@ window.addEventListener("beforeunload", cleanAction);
 }
 
 .info-text {
+  word-break: break-all;
   font-family: Adobe Heiti Std;
   font-size: 1.3rem;
   display: flex;

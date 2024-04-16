@@ -116,6 +116,9 @@ export default {
         nowTime: '当前时间',
         nowDate: '当前日期',
         serverLimit: '服务期限',
-        nowDevice: '当前设备'
+        nowDevice: '当前设备',
+        timeCycle: '时间周期',
+        chartTimeCycle: "图表轮询周期",
+        deviceAndAlarmTimeCycle: "设备和警告轮询周期"
     }
 }

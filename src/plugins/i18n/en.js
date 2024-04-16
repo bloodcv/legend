@@ -116,6 +116,9 @@ export default {
         nowTime: 'Now Time',
         nowDate: 'Now Date',
         serverLimit: 'Server Limit',
-        nowDevice: 'Now Device'
+        nowDevice: 'Now Device',
+        timeCycle: 'Time Cycle',
+        chartTimeCycle: "Chart Time Cycle",
+        deviceAndAlarmTimeCycle: "Device And Alarm Time Cycle"
     }
 }
