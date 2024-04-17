@@ -4,3 +4,5 @@ const a3 = 3
 const b1 = 1
 const b2 = 2
 const b3 = 3
+const b4 = 4
+const b5 = 5
